@@ -1,6 +1,9 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AuthProtection from "./components/auth/AuthProtection";
+import UnAuthProtection from "./components/auth/UnAuthProtection";
 import AuthContextProvider from "./context/AuthContext";
+import Dashboard from "./pages/Dashboard";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
@@ -13,9 +16,30 @@ function App() {
         <AuthContextProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Navigate to="/signin" />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
+              <Route
+                path="/"
+                element={
+                  <AuthProtection href="/">
+                    <Dashboard />
+                  </AuthProtection>
+                }
+              />
+              <Route
+                path="/signin"
+                element={
+                  <UnAuthProtection>
+                    <SignIn />
+                  </UnAuthProtection>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <UnAuthProtection>
+                    <SignUp />
+                  </UnAuthProtection>
+                }
+              />
             </Routes>
           </BrowserRouter>
         </AuthContextProvider>

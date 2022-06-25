@@ -7,91 +7,64 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import { useState, FC, useCallback, ChangeEventHandler } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler } from "react";
+import { SignInFormErrors } from "../../types";
 import AppLink from "../ui/AppLink";
 
-interface FormProps {
-  onSubmit: (email: string, password: string) => void;
+interface SignInFormProps {
+  email: string;
+  password: string;
+  erorrs: SignInFormErrors;
+  isLoading: boolean;
+  onChangeEmail: ChangeEventHandler<HTMLInputElement>;
+  onChangePassword: ChangeEventHandler<HTMLInputElement>;
+  onSubmit: MouseEventHandler<HTMLButtonElement>;
 }
 
-interface SignInFormErrors {
-  email: string | null;
-  password: string | null;
-}
-
-const SignInForm: FC<FormProps> = ({ onSubmit, ...props }) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const [erorrs, setErorrs] = useState<SignInFormErrors>({
-    email: "",
-    password: "",
-  });
-
-  const validate = useCallback(() => {
-    let hasErrors = false;
-
-    if (!email) {
-      setErorrs((erorrs) => ({ ...erorrs, email: "Email is required" }));
-      hasErrors = true;
-    }
-
-    if (!password) {
-      setErorrs((erorrs) => ({ ...erorrs, password: "Password is required" }));
-      hasErrors = true;
-    }
-
-    return hasErrors;
-  }, [email, password]);
-
-  const handleSubmit = useCallback(() => {
-    if (!validate()) return;
-
-    onSubmit(email, password);
-  }, [email, password, onSubmit, validate]);
-
-  const handleEmailChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setEmail(e.target.value);
-    setErorrs({ ...erorrs, email: null });
-  };
-
-  const handlePasswordChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPassword(e.target.value);
-    setErorrs({ ...erorrs, password: null });
-  };
-
+const SignInForm: FC<SignInFormProps> = ({
+  erorrs,
+  isLoading,
+  email,
+  password,
+  onChangeEmail,
+  onChangePassword,
+  onSubmit,
+}) => {
   return (
     <Box my={4}>
       <FormControl isInvalid={!!erorrs.email} mb={3} isRequired>
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
+          disabled={isLoading}
           id="email"
           type="email"
           placeholder="Type your email"
           value={email}
-          onChange={handleEmailChange}
+          onChange={onChangeEmail}
         />
         {!!erorrs.email && <FormErrorMessage>{erorrs.email}</FormErrorMessage>}
       </FormControl>
       <FormControl isInvalid={!!erorrs.password} mb={3} isRequired>
         <FormLabel htmlFor="password">Password</FormLabel>
         <Input
+          disabled={isLoading}
           type="password"
           id="password"
           placeholder="Type your password"
           value={password}
-          onChange={handlePasswordChange}
+          onChange={onChangePassword}
         />
         {!!erorrs.password && (
           <FormErrorMessage>{erorrs.password}</FormErrorMessage>
         )}
       </FormControl>
       <Button
-        onClick={handleSubmit}
+        onClick={onSubmit}
         my={3}
         type="submit"
         variant="solid"
         colorScheme="green"
+        isLoading={isLoading}
       >
         Sign In
       </Button>

@@ -21,3 +21,22 @@ export interface SignUpBody{
   email: string;
   password: string;
 }
+
+export interface SignUpFormErrors {
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  password: string | null;
+  confirmPassword: string | null;
+}
+
+
+export interface SignInFormErrors {
+  email: string | null;
+  password: string | null;
+}
+
+export interface SignInUserVariables{
+  email: string;
+  password: string;
+}
