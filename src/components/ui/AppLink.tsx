@@ -12,6 +12,7 @@ const AppLink: FC<AppLinkProps> = ({ href, ...props }) => {
       textDecoration="none"
       _hover={{ textDecoration: "none" }}
       _focus={{ textDecoration: "none" }}
+      {...props}
     >
       {props.children}
     </Link>
