@@ -16,12 +16,16 @@ import { Profile } from "../types";
 const Dashboard = () => {
   const { uid } = useContext(AuthContext);
 
-  const { data, error, isFetching, isError } = useQuery(["user", uid], ({ queryKey }) => {
-    const [_key, uid] = queryKey;
-    return fetchUserProfile(uid);
-  });
+  const { data, error, isFetching, isError } = useQuery(
+    ["user", uid],
+    ({ queryKey }) => {
+      const [_key, uid] = queryKey;
+      return fetchUserProfile(uid);
+    }
+  );
 
   const profile = data as Profile;
+  console.log(profile);
 
   const [display, setDisplay] = useState<
     "my-store" | "recents" | "starred" | "recycle-bin"
@@ -50,8 +54,6 @@ const Dashboard = () => {
     return <FullScreenLoader loadingText="Loading your profile" />;
   }
 
-  console.log("Profile Data", data);
-
   return (
     <>
       {/* <NewFolderDialog
@@ -61,7 +63,10 @@ const Dashboard = () => {
         isOpen={showNewFolderModal}
         onClose={() => setShowNewFolderModal(false)}
       /> */}
-      <Navbar />
+      <Navbar
+        name={`${profile.firstName} ${profile.lastName}`}
+        profilePhoto={profile.profilePhoto}
+      />
       <Flex maxHeight="90vh" overflow="hidden">
         <Box w="20%" height="100vh" overflowY="hidden">
           <SideNav

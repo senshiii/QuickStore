@@ -14,8 +14,14 @@ import {
 import { BiSearchAlt } from "react-icons/bi";
 import { MdTune } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
+import { FC } from "react";
 
-const Navbar = () => {
+interface NavbarProps{
+  name: string;
+  profilePhoto: string;
+}
+
+const Navbar: FC<NavbarProps> = (props) => {
   return (
     <Flex
       borderBottomColor="gray.300"
@@ -52,8 +58,8 @@ const Navbar = () => {
           aria-label="Settings Button"
         />
         <Flex ml={3} bg="gray.300" px={2} rounded="lg" justify="center" align="center" >
-          <Avatar size="sm" name="Sayan Das" />
-          <Text ml={3} >Sayan Das</Text>
+          <Avatar size="sm" name={props.name} src={props.profilePhoto} />
+          <Text ml={3} >{props.name}</Text>
         </Flex>
       </Flex>
     </Flex>

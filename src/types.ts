@@ -46,3 +46,10 @@ export interface NewFolderVariables{
   uid: string;
   folderName: string;
 }
+
+export interface Folder{
+  id: string;
+  uid: string;
+  name: string;
+  createdAt: Date;
+}

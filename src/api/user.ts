@@ -60,9 +60,9 @@ export async function fetchFilesAndFolders(uid: string) {
       orderBy("createdAt", "desc"),
       limit(30)
     );
-    const files = executeQuery(fileQuery);
 
-    return { files, folders };
+    const files = await executeQuery(fileQuery);
+    return { folders, files };
   } catch (error: any) {
     console.log("Error fetching files and folders", error.message);
     throw error;

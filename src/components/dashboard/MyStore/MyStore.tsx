@@ -2,6 +2,8 @@ import { Box, Text } from "@chakra-ui/react";
 import React, { FC } from "react";
 import { useQuery } from "react-query";
 import { fetchFilesAndFolders } from "../../../api/user";
+import { Folder } from "../../../types";
+import Folders from "./Folders";
 
 interface MyStoreProps {
   uid: string;
@@ -16,14 +18,14 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
     }
   );
 
-  if (isFetching) return <h1>Loading....</h1>;
+  if (isError) return <h1>Error</h1>;
 
   console.log("Files And Folders", data);
 
   return (
     <Box>
-      <Text mb={3}>My Folders</Text>  
-      
+      <Text mb={3}>My Folders</Text>
+      <Folders isLoading={isFetching} folders={data?.folders as Folder[]} />
       <Text mb={3}>My Files</Text>
     </Box>
   );
