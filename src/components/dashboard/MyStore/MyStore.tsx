@@ -3,7 +3,7 @@ import React, { FC, useContext } from "react";
 import { useQuery } from "react-query";
 import { fetchFilesAndFolders } from "../../../api/user";
 import { UserDataContext } from "../../../context/UserDataContext";
-import { File, Folder } from "../../../types";
+import { AppFile, Folder } from "../../../types";
 import FileList from "./Files";
 import Folders from "./Folders";
 
@@ -21,9 +21,10 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
       return fetchFilesAndFolders(uid);
     },
     {
+      refetchOnWindowFocus: false,
       onSuccess: (data) => {
         const { files, folders } = (data as unknown) as {
-          files: File[];
+          files: AppFile[];
           folders: Folder[];
         };
         setFiles(files);
@@ -35,10 +36,8 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
   if (isError) return <h1>Error</h1>;
 
   return (
-    <Box h='100%' overflowY="scroll" >
-      <Text mb={3}>My Folders</Text>
+    <Box h="100%" overflowY="scroll">
       <Folders isLoading={isFetching} folders={folders} />
-      <Text mb={3}>My Files</Text>
       <FileList isLoading={isFetching} files={files} />
     </Box>
   );

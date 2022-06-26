@@ -1,14 +1,14 @@
 import { createContext, FC, ReactElement, useCallback, useState } from "react";
-import { File, Folder } from "../types";
+import { AppFile, Folder } from "../types";
 
 interface UserDataContextVariables {
-  files: Array<File>;
+  files: Array<AppFile>;
   folders: Array<Folder>;
-  addFile: (file: File) => void;
+  addFile: (file: AppFile) => void;
   addFolder: (folder: Folder) => void;
-  removeFile: (file: File) => void;
+  removeFile: (file: AppFile) => void;
   removeFolder: (folder: Folder) => void;
-  setFiles: (files: File[]) => void;
+  setFiles: (files: AppFile[]) => void;
   setFolders: (folders: Folder[]) => void;
 }
 
@@ -26,7 +26,7 @@ export const UserDataContext = createContext<UserDataContextVariables>({
 const UserDataContextProvider: FC<{ children: ReactElement }> = ({
   children,
 }) => {
-  const [files, setFiles] = useState<Array<File>>([]);
+  const [files, setFiles] = useState<Array<AppFile>>([]);
   const [folders, setFolders] = useState<Array<Folder>>([]);
 
   const addFolder = useCallback(
@@ -44,14 +44,14 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
   );
 
   const addFile = useCallback(
-    (newFile: File) => {
+    (newFile: AppFile) => {
       setFiles([...files, newFile]);
     },
     [files]
   );
 
   const removeFile = useCallback(
-    (targetFile: File) => {
+    (targetFile: AppFile) => {
       setFiles(files.filter((file) => file.id !== targetFile.id));
     },
     [files]

@@ -3,15 +3,16 @@ import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { fetchUserProfile } from "../api/user";
 import MyStore from "../components/dashboard/MyStore/MyStore";
-import Navbar from "../components/dashboard/Navbar";
-import NewFolderDialog from "../components/dashboard/NewFolderDialog";
+import Navbar from "../components/dashboard/navigation/Navbar";
+import NewFolderDialog from "../components/dashboard/modals/NewFolderDialog";
 import Recents from "../components/dashboard/Recents";
 import RecycleBin from "../components/dashboard/RecycleBin";
-import SideNav from "../components/dashboard/SideNav";
+import SideNav from "../components/dashboard/navigation/SideNav";
 import Starred from "../components/dashboard/Starred";
 import FullScreenLoader from "../components/ui/FullScreenLoader";
 import { AuthContext } from "../context/AuthContext";
 import { Profile } from "../types";
+import NewFileModal from "../components/dashboard/modals/NewFileModal";
 
 const Dashboard = () => {
   const { uid } = useContext(AuthContext);
@@ -21,6 +22,9 @@ const Dashboard = () => {
     ({ queryKey }) => {
       const [_key, uid] = queryKey;
       return fetchUserProfile(uid);
+    },
+    {
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -30,7 +34,8 @@ const Dashboard = () => {
     "my-store" | "recents" | "starred" | "recycle-bin"
   >("my-store");
   const [showNewFolderModal, setShowNewFolderModal] = useState<boolean>(false);
-  
+  const [showNewFileModal, setShowNewFileModal] = useState<boolean>(false);
+
   let DisplayComponent = null;
 
   switch (display) {
@@ -59,19 +64,20 @@ const Dashboard = () => {
         isOpen={showNewFolderModal}
         onClose={() => setShowNewFolderModal(false)}
       />
+      <NewFileModal
+        uid={uid}
+        isOpen={showNewFileModal}
+        onClose={() => setShowNewFileModal(false)}
+      />
       <Navbar
         name={`${profile.firstName} ${profile.lastName}`}
         profilePhoto={profile.profilePhoto}
       />
-      <Flex maxHeight="90vh" overflow="hidden">
+      <Flex maxHeight="90vh" bg="appBackground" overflow="hidden">
         <Box w="20%" height="100vh" overflowY="hidden">
           <SideNav
-            onClickNewFolder={() => {
-              console.log("Cliced new folder button");
-              setShowNewFolderModal(true);
-            }}
-            onClickUploadFile={() => {}}
-            onClickUploadFolder={() => {}}
+            onClickNewFolder={() => setShowNewFolderModal(true)}
+            onClickUploadFile={() => setShowNewFileModal(true)}
             maxSpaceAvailable={profile.maxSpaceAvailable}
             totalSpaceUsed={profile.totalSpaceUsed}
           />

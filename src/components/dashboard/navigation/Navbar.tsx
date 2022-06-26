@@ -16,7 +16,7 @@ import { MdTune } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 import { FC } from "react";
 
-interface NavbarProps{
+interface NavbarProps {
   name: string;
   profilePhoto: string;
 }
@@ -24,23 +24,33 @@ interface NavbarProps{
 const Navbar: FC<NavbarProps> = (props) => {
   return (
     <Flex
-      borderBottomColor="gray.300"
+      borderBottomColor="button"
       borderBottomWidth="thin"
       align="center"
       justify="start"
       p={4}
       height="10vh"
+      bg="appBackground"
     >
       <Box w="20%">
-        <Heading fontSize="3xl">QuickStore</Heading>
+        <Heading color="headline" fontSize="3xl">
+          QuickStore
+        </Heading>
       </Box>
       <InputGroup w="60%">
         <InputLeftElement pointerEvents="none">
-          <Icon as={BiSearchAlt} />
+          <Icon color="button" as={BiSearchAlt} />
         </InputLeftElement>
-        <Input type="text" placeholder="Search your files & folders ..." />
+        <Input
+          _placeholder={{ color: "headline" }}
+          color="headline"
+          type="text"
+          placeholder="Search your files & folders ..."
+        />
         <InputRightElement p={4} pointerEvents="all">
           <IconButton
+            bg="button"
+            color="headline"
             onClick={() => {}}
             icon={<MdTune />}
             aria-label="Tune Search"
@@ -57,9 +67,24 @@ const Navbar: FC<NavbarProps> = (props) => {
           icon={<FiSettings />}
           aria-label="Settings Button"
         />
-        <Flex ml={3} bg="gray.300" px={2} rounded="lg" justify="center" align="center" >
-          <Avatar size="sm" name={props.name} src={props.profilePhoto} />
-          <Text ml={3} >{props.name}</Text>
+        <Flex
+          ml={3}
+          bg="cardBackground"
+          px={2}
+          rounded="lg"
+          justify="center"
+          align="center"
+        >
+          <Avatar
+            color="headline"
+            bg="button"
+            size="sm"
+            name={props.name}
+            src={props.profilePhoto}
+          />
+          <Text color="headline" ml={3}>
+            {props.name}
+          </Text>
         </Flex>
       </Flex>
     </Flex>

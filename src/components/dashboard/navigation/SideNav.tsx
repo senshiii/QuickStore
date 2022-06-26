@@ -25,7 +25,7 @@ import {
 import { ImFolderPlus, ImFolderUpload } from "react-icons/im";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaFileUpload } from "react-icons/fa";
-import { storagePercentageCalc } from "../../utils";
+import { storagePercentageCalc } from "../../../utils";
 
 interface MenuOptionsProps {
   icon: As<any>;
@@ -52,21 +52,17 @@ const MenuOption: FC<MenuOptionsProps> = (props) => {
         align="center"
         onClick={props.onClick}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave} 
+        onMouseLeave={handleMouseLeave}
       >
-        <Icon as={props.icon} fontSize="lg" />
-        <Text flex={1} ml={6} fontSize="md">
+        <Icon color="button" as={props.icon} fontSize="lg" />
+        <Text
+          color={props.isActive ? "button" : "headline"}
+          flex={1}
+          ml={6}
+          fontSize="md"
+        >
           {props.label}
         </Text>
-        {(props.isActive || isHover) && (
-          <Box
-            ml="auto"
-            w="4px"
-            rounded="lg"
-            alignSelf="stretch"
-            background="blue"
-          />
-        )}
       </Flex>
       <Box h=".5px" bg="gray.700" my={3} rounded="lg" />
     </>
@@ -75,7 +71,6 @@ const MenuOption: FC<MenuOptionsProps> = (props) => {
 
 interface SideNavProps {
   onClickNewFolder: MouseEventHandler<HTMLButtonElement>;
-  onClickUploadFolder: MouseEventHandler<HTMLButtonElement>;
   onClickUploadFile: MouseEventHandler<HTMLButtonElement>;
   maxSpaceAvailable: number;
   totalSpaceUsed: number;
@@ -112,12 +107,12 @@ const SideNav: FC<SideNavProps> = (props) => {
           >
             Upload New File
           </MenuItem>
-          <MenuItem
+          {/* <MenuItem
             onClick={props.onClickUploadFolder}
             icon={<ImFolderUpload fontSize="1.2rem" />}
           >
             Upload New Folder
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem
             onClick={props.onClickNewFolder}
             icon={<ImFolderPlus fontSize="1.2rem" />}
@@ -150,11 +145,16 @@ const SideNav: FC<SideNavProps> = (props) => {
 
       {/* Storage Display */}
       <Box my={4}>
-        <Text display="flex" justifyContent="flex-start" alignItems="center">
+        <Text
+          color="headline"
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="center"
+        >
           <Icon fontSize="xl" as={AiOutlineCloud} />
           &nbsp; Your Storage
         </Text>
-        <Text fontSize="xs" color="green" my={2}>
+        <Text fontSize="xs" color="tertiary" my={2}>
           {Math.round(props.totalSpaceUsed / 1000000)} /{" "}
           {props.maxSpaceAvailable / 1000000} Mb used.{" "}
           {storagePercentageCalc(props.totalSpaceUsed, props.maxSpaceAvailable)}

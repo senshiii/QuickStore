@@ -1,6 +1,7 @@
-import { Box, Flex, Grid, GridItem, Skeleton, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Image, Skeleton, Text } from "@chakra-ui/react";
 import React, { FC } from "react";
-import { File } from "../../../types";
+import { AppFile } from "../../../types";
+import NoFilesImage from '../../../assets/no-folders.png'
 
 const LoadingSkeleton = () => {
   return (
@@ -34,7 +35,7 @@ const LoadingSkeleton = () => {
 };
 
 interface FileCardProps {
-  file: File;
+  file: AppFile;
 }
 
 const FileCard: FC<FileCardProps> = (props) => {
@@ -49,14 +50,23 @@ const FileCard: FC<FileCardProps> = (props) => {
 };
 
 interface FileListProps {
-  files: File[];
+  files: AppFile[];
   isLoading: boolean;
 }
 
 const FileList: FC<FileListProps> = (props) => {
   if (props.isLoading) return <LoadingSkeleton />;
 
+  if(props.files.length === 0) {
+    return <Flex my={4} justify={"center"} align="center" direction={"column"}  >
+      <Image src={NoFilesImage} alt="No Files" width="300px" />
+      <Text color="paragraph" mt={4} >No Files to show. Upload one</Text>
+    </Flex>
+  }
+
   return (
+    <>
+    <Text color="headline" mb={4} fontSize="xl" fontWeight={"bold"} >Folders</Text>
     <Grid>
       {props.files.map((file) => (
         <GridItem key={file.id} w="100%">
@@ -64,6 +74,7 @@ const FileList: FC<FileListProps> = (props) => {
         </GridItem>
       ))}
     </Grid>
+      </>
   );
 };
 

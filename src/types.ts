@@ -54,9 +54,20 @@ export interface Folder{
   createdAt: Date;
 }
 
-export interface File{
+export interface AppFile{
   id: string;
   src: string;
   sizeInBytes: number;
   fileName: string; 
 }
+
+export interface UploadFileVariables{
+  file: File;
+  path: string;
+}
+
+export interface CreateNewFileVariables{
+  file: File;
+  uid: string;
+}
+

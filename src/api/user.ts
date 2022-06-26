@@ -10,8 +10,14 @@ import {
   limit,
 } from "firebase/firestore";
 import { db } from "../config/firebase-config";
-import { NewFolderVariables, UserBody } from "../types";
+import {
+  CreateNewFileVariables,
+  NewFolderVariables,
+  UploadFileVariables,
+  UserBody,
+} from "../types";
 import { id } from "../utils";
+import { uploadFile } from "./storage";
 import { executeQuery } from "./util";
 
 export async function createUser(body: UserBody) {
@@ -85,5 +91,15 @@ export async function createNewFolder({ uid, folderName }: NewFolderVariables) {
     return (await getDoc(docRef)).data();
   } catch (error: any) {
     console.log("Error creating new folder", error.message);
+  }
+}
+
+export async function createNewFile({ file, uid }: CreateNewFileVariables) {
+  try {
+    console.log("File", file);
+    await uploadFile({file, path: `/${uid}/${file.name}`})
+  } catch (error: any) {
+    console.log("Error uploading file", error);
+    throw error;
   }
 }
