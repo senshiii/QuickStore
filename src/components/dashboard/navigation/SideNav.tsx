@@ -88,32 +88,32 @@ const SideNav: FC<SideNavProps> = (props) => {
           color="white"
           background="linear-gradient(to right, #8e2de2, #4a00e0)"
           _hover={{
-            background: "linear-gradient(to right, #fc466b, #3f5efb)",
+            background: "button",
           }}
           _active={{
-            background: "linear-gradient(to right, #fc466b, #3f5efb)",
+            background: "button",
           }}
           _focus={{
-            background: "linear-gradient(to right, #fc466b, #3f5efb)",
+            background: "button",
           }}
           leftIcon={<BsFilePlus fontSize="1rem" />}
         >
           New File
         </MenuButton>
-        <MenuList>
+        <MenuList bg="cardBackground">
           <MenuItem
+            _focus={{ bg: "appBackground" }}
+            _active={{ bg: "appBackground" }}
+            color="headline"
             onClick={props.onClickUploadFile}
             icon={<FaFileUpload fontSize="1.2rem" />}
           >
             Upload New File
           </MenuItem>
-          {/* <MenuItem
-            onClick={props.onClickUploadFolder}
-            icon={<ImFolderUpload fontSize="1.2rem" />}
-          >
-            Upload New Folder
-          </MenuItem> */}
           <MenuItem
+            _focus={{ bg: "appBackground" }}
+            _active={{ bg: "appBackground" }}
+            color="headline"
             onClick={props.onClickNewFolder}
             icon={<ImFolderPlus fontSize="1.2rem" />}
           >
