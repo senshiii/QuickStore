@@ -11,9 +11,11 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { useMutation } from "react-query";
 import { createNewFolder } from "../../api/user";
+import { UserDataContext } from "../../context/UserDataContext";
+import { Folder } from "../../types";
 
 interface ModalProps {
   isOpen: boolean;
@@ -26,12 +28,16 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
   const [folderName, setFolderName] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const { addFolder } = useContext(UserDataContext)
+
   const mutation = useMutation(createNewFolder, {
     onMutate: () => {
       setIsLoading(true);
     },
     onSuccess: (data) => {
-
+      addFolder(data as Folder);
+      setIsLoading(false);
+      props.onClose();
     }
   });
 

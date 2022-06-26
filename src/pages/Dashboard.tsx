@@ -25,14 +25,12 @@ const Dashboard = () => {
   );
 
   const profile = data as Profile;
-  console.log(profile);
 
   const [display, setDisplay] = useState<
     "my-store" | "recents" | "starred" | "recycle-bin"
   >("my-store");
   const [showNewFolderModal, setShowNewFolderModal] = useState<boolean>(false);
-  const [newFolderName, setNewFolderName] = useState<string>("");
-
+  
   let DisplayComponent = null;
 
   switch (display) {

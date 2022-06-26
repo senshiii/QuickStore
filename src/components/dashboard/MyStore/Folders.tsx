@@ -5,8 +5,8 @@ import { Folder } from "../../../types";
 const SkeletonFolder = () => {
   return (
     <Box>
-      <Skeleton roundedBottom={"none"} w="20%" h="15px" />
-      <Skeleton roundedTop="none" w="100%" h="60px" />
+      <Skeleton startColor="blue.100" endColor="blue.200" roundedBottom={"none"} w="20%" h="15px" />
+      <Skeleton startColor="blue.100" endColor="blue.200" roundedTop="none" w="100%" h="60px" />
     </Box>
   );
 };
@@ -44,9 +44,9 @@ interface FolderProps {
 const FolderComponent: FC<FolderProps> = (props) => {
   return (
     <Box cursor={"pointer"} my={3}>
-      <Box bg="gray.200" rounded="sm" roundedBottom={"none"} w="20%" h="15px" />
+      <Box bg="blue.200" rounded="sm" roundedBottom={"none"} w="20%" h="15px" />
       <Flex
-        bg="gray.200"
+        bg="blue.200"
         justify="center"
         align="center"
         rounded="sm"
@@ -54,7 +54,7 @@ const FolderComponent: FC<FolderProps> = (props) => {
         w="100%"
         h="60px"
       >
-        <Text>{props.name}</Text>
+        <Text fontWeight="bold" fontSize="lg" >{props.name}</Text>
       </Flex>
     </Box>
   );
@@ -67,6 +67,12 @@ interface FolderListProps {
 
 const FolderList = (props: FolderListProps) => {
   if (props.isLoading) return <LoadingSkeleton />;
+
+  if(props.folders.length === 0) {
+    return <Flex justify="center" align="center" my={4} height="300px" >
+      <Text>No Folders Found</Text>
+    </Flex>
+  }
 
   return (
     <Grid my={4} w="100%" templateColumns="repeat(5, 1fr)" gap={6}>

@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { fetchFilesAndFolders } from "../../../api/user";
 import { UserDataContext } from "../../../context/UserDataContext";
 import { File, Folder } from "../../../types";
+import FileList from "./Files";
 import Folders from "./Folders";
 
 interface MyStoreProps {
@@ -33,13 +34,12 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
 
   if (isError) return <h1>Error</h1>;
 
-  console.log("Files And Folders", files, folders);
-
   return (
-    <Box>
+    <Box h='100%' overflowY="scroll" >
       <Text mb={3}>My Folders</Text>
       <Folders isLoading={isFetching} folders={folders} />
       <Text mb={3}>My Files</Text>
+      <FileList isLoading={isFetching} files={files} />
     </Box>
   );
 };
