@@ -11,20 +11,30 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { ChangeEventHandler, FC, useState } from "react";
+import { FC, useState } from "react";
+import { useMutation } from "react-query";
 import { createNewFolder } from "../../api/user";
-import AsyncTaskModal from "../../hoc/AsyncTaskModal";
 
 interface ModalProps {
   isOpen: boolean;
+  uid: string;
   onClose: () => void;
-  onPrimaryAction: any;
-  name: string;
-  onChangeName: ChangeEventHandler<HTMLInputElement>;
 }
 
 const NewFolderDialog: FC<ModalProps> = (props) => {
   const [initialFocusRef, setInitialFocusRef] = useState<any>();
+  const [folderName, setFolderName] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const mutation = useMutation(createNewFolder, {
+    onMutate: () => {
+      setIsLoading(true);
+    },
+    onSuccess: (data) => {
+
+    }
+  });
+
   return (
     <Modal
       initialFocusRef={initialFocusRef}
@@ -32,6 +42,8 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
       isOpen={props.isOpen}
       onClose={props.onClose}
       blockScrollOnMount
+      closeOnEsc={!isLoading}
+      closeOnOverlayClick={!isLoading}
     >
       <ModalOverlay />
       <ModalContent>
@@ -45,17 +57,27 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
               type="text"
               id="name"
               placeholder="Type folder name"
-              value={props.name}
-              onChange={props.onChangeName}
+              value={folderName}
+              onChange={e => setFolderName(e.target.value)}
               ref={initialFocusRef}
             />
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={props.onClose} variant="outline" colorScheme="red">
-            Cancel  
+          <Button
+            disabled={isLoading}
+            onClick={props.onClose}
+            variant="outline"
+            colorScheme="red"
+          >
+            Cancel
           </Button>
-          <Button onClick={props.onPrimaryAction} variant="solid" colorScheme="green" ml={4}>
+          <Button
+            onClick={() => mutation.mutate({ uid: props.uid, folderName })}
+            variant="solid"
+            colorScheme="green"
+            ml={4}
+          >
             Proceed
           </Button>
         </ModalFooter>
@@ -64,6 +86,4 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
   );
 };
 
-const WrappedComponent = AsyncTaskModal(NewFolderDialog, createNewFolder);
-
-export default WrappedComponent;
+export default NewFolderDialog;

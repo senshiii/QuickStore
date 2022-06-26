@@ -43,7 +43,7 @@ interface FolderProps {
 }
 const FolderComponent: FC<FolderProps> = (props) => {
   return (
-    <Box my={3}>
+    <Box cursor={"pointer"} my={3}>
       <Box bg="gray.200" rounded="sm" roundedBottom={"none"} w="20%" h="15px" />
       <Flex
         bg="gray.200"

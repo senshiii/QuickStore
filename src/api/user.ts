@@ -71,6 +71,7 @@ export async function fetchFilesAndFolders(uid: string) {
 
 export async function createNewFolder({ uid, folderName }: NewFolderVariables) {
   try {
+    console.log("Variables", { uid, folderName });
     const folderId = id();
     const folderData = {
       id: folderId,

@@ -53,3 +53,10 @@ export interface Folder{
   name: string;
   createdAt: Date;
 }
+
+export interface File{
+  id: string;
+  src: string;
+  sizeInBytes: number;
+  fileName: string; 
+}

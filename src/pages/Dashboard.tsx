@@ -56,13 +56,11 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* <NewFolderDialog
-        name={newFolderName}
-        onChangeName={(e: any) => setNewFolderName(e.target.value)}
-        variables={{}}
+      <NewFolderDialog
+        uid={uid}
         isOpen={showNewFolderModal}
         onClose={() => setShowNewFolderModal(false)}
-      /> */}
+      />
       <Navbar
         name={`${profile.firstName} ${profile.lastName}`}
         profilePhoto={profile.profilePhoto}
