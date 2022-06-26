@@ -49,10 +49,10 @@ export async function createUserAccountUsingGoogle() {
   try {
     const result = await signInWithPopup(auth, googleAuthProvider);
     const authUser = result.user;
-    await createUser({
+    createUser({
       email: authUser.email!,
       firstName: authUser.displayName?.trim().split(" ")[0]!,
-      lastName: authUser.displayName?.trim().split(" ")[0]!,
+      lastName: authUser.displayName?.trim().split(" ")[1]!,
       id: authUser.uid,
       profilePhoto: authUser.photoURL!,
     });

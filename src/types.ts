@@ -1,10 +1,12 @@
-export interface User{
+export interface Profile{
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  profilePicture: string;
+  profilePhoto: string;
+  maxSpaceAvailable: number;
+  totalSpaceUsed: number;
+  createdAt: { seconds: number; nanoseconds: number }
 }
 
 export interface UserBody {
@@ -30,7 +32,6 @@ export interface SignUpFormErrors {
   confirmPassword: string | null;
 }
 
-
 export interface SignInFormErrors {
   email: string | null;
   password: string | null;
@@ -39,4 +40,9 @@ export interface SignInFormErrors {
 export interface SignInUserVariables{
   email: string;
   password: string;
+}
+
+export interface NewFolderVariables{
+  uid: string;
+  folderName: string;
 }
