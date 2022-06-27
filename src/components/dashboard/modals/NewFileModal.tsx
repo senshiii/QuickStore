@@ -25,12 +25,15 @@ const NewFileModal: FC<NewFileModalProps> = (props) => {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  console.log("Selected File", file);
+
   const mutation = useMutation(createNewFile, {
     onMutate: () => {
       setIsLoading(true);
     },
     onSuccess: (data) => {
-      console.log("Data", data);
+      console.log("Uploaded File Data", data);
+      setFile(null);
       setIsLoading(false);
       props.onClose();
     },

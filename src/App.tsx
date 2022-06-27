@@ -27,6 +27,14 @@ function App() {
                   }
                 />
                 <Route
+                  path="/folders/:folderId"
+                  element={
+                    <AuthProtection href="/signin">
+                      <h1>Folders</h1>
+                    </AuthProtection>
+                  }
+                />
+                <Route
                   path="/signin"
                   element={
                     <UnAuthProtection>

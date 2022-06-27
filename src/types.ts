@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 export interface Profile{
   id: string;
   firstName: string;
@@ -59,6 +61,9 @@ export interface AppFile{
   src: string;
   sizeInBytes: number;
   fileName: string; 
+  createdAt: FieldValue;
+  uid?: string;
+  bucketId?: string;
 }
 
 export interface UploadFileVariables{

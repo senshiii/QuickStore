@@ -11,7 +11,7 @@ export function checkPasswordStrength(password: string): "strong" | "weak" {
   return "strong";
 }
 
-export function id() {
+export function generateId() {
   return nanoid();
 }
 
@@ -19,6 +19,10 @@ export function storagePercentageCalc(usedSpace: number, totalSpace: number) {
   if (usedSpace == 0) return 100;
   else if (usedSpace > 0) {
     const spaceLeft = totalSpace - usedSpace;
-    return Math.round((spaceLeft / totalSpace) * 100);
+    return ((spaceLeft / totalSpace) * 100).toFixed(2);
   }
+}
+
+export function bytesToMegaBytes(bytes: number) {
+  return parseInt((bytes / 1000000).toFixed(2));
 }

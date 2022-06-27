@@ -25,7 +25,7 @@ import {
 import { ImFolderPlus, ImFolderUpload } from "react-icons/im";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaFileUpload } from "react-icons/fa";
-import { storagePercentageCalc } from "../../../utils";
+import { bytesToMegaBytes, storagePercentageCalc } from "../../../utils";
 
 interface MenuOptionsProps {
   icon: As<any>;
@@ -77,6 +77,9 @@ interface SideNavProps {
 }
 
 const SideNav: FC<SideNavProps> = (props) => {
+  const spaceUsed = bytesToMegaBytes(props.totalSpaceUsed);
+  const totalSpace = bytesToMegaBytes(props.maxSpaceAvailable);
+
   return (
     <Box p={4} height="100%" color="black">
       {/* Add File Button */}
@@ -155,14 +158,12 @@ const SideNav: FC<SideNavProps> = (props) => {
           &nbsp; Your Storage
         </Text>
         <Text fontSize="xs" color="tertiary" my={2}>
-          {Math.round(props.totalSpaceUsed / 1000000)} /{" "}
-          {props.maxSpaceAvailable / 1000000} Mb used.{" "}
-          {storagePercentageCalc(props.totalSpaceUsed, props.maxSpaceAvailable)}
-          % storage left
+          {spaceUsed} / {totalSpace} Mb used.{" "}
+          {storagePercentageCalc(spaceUsed, totalSpace)}% storage left
         </Text>
-        <Slider value={props.totalSpaceUsed}>
-          <SliderTrack>
-            <SliderFilledTrack />
+        <Slider max={totalSpace} value={spaceUsed}>
+          <SliderTrack >
+            <SliderFilledTrack bg="button" />
           </SliderTrack>
         </Slider>
       </Box>

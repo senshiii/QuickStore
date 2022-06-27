@@ -29,6 +29,7 @@ const Dashboard = () => {
   );
 
   const profile = data as Profile;
+  console.log("Profile Data", profile); 
 
   const [display, setDisplay] = useState<
     "my-store" | "recents" | "starred" | "recycle-bin"

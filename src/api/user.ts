@@ -8,16 +8,20 @@ import {
   where,
   orderBy,
   limit,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import {
+  AppFile,
   CreateNewFileVariables,
   NewFolderVariables,
+  Profile,
   UploadFileVariables,
   UserBody,
 } from "../types";
-import { id } from "../utils";
-import { uploadFile } from "./storage";
+import { bytesToMegaBytes, generateId } from "../utils";
+import { getFileUrl, uploadFile } from "./storage";
 import { executeQuery } from "./util";
 
 export async function createUser(body: UserBody) {
@@ -78,7 +82,7 @@ export async function fetchFilesAndFolders(uid: string) {
 export async function createNewFolder({ uid, folderName }: NewFolderVariables) {
   try {
     console.log("Variables", { uid, folderName });
-    const folderId = id();
+    const folderId = generateId();
     const folderData = {
       id: folderId,
       name: folderName,
@@ -96,8 +100,48 @@ export async function createNewFolder({ uid, folderName }: NewFolderVariables) {
 
 export async function createNewFile({ file, uid }: CreateNewFileVariables) {
   try {
-    console.log("File", file);
-    await uploadFile({file, path: `/${uid}/${file.name}`})
+    const path = `/${uid}/${file.name}`;
+
+    // CHECK FOR STORAGE AVAILABILITY
+    const userDocRef = doc(db, "user", uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (!userDocSnap.exists) throw new Error(`User with id = ${uid} not found`);
+    const user = userDocSnap.data() as Profile;
+
+    // console.log("Total Space", bytesToMegaBytes(user.maxSpaceAvailable));
+    // console.log("Space Used", bytesToMegaBytes(user.totalSpaceUsed));
+    // console.log("File Size", bytesToMegaBytes(file.size));
+    // console.log(
+    //   "Space exceeded",
+    //   user.totalSpaceUsed + file.size > user.maxSpaceAvailable
+    // );
+
+    if (user.totalSpaceUsed + file.size > user.maxSpaceAvailable)
+      throw new Error("Cannot upload file. Space not available.");
+
+    // UPLOAD FILE
+    await uploadFile({ file, path });
+
+    // GET URL OF UPLOADED FILE
+    const url = await getFileUrl(path);
+
+    // CREATE FILE DOCUMENT IN FIRESTORE
+    const filename = file.name.substring(0, file.name.trim().lastIndexOf("."));
+    const fileData: AppFile = {
+      id: generateId(),
+      fileName: filename,
+      sizeInBytes: file.size,
+      src: url,
+      uid,
+      createdAt: serverTimestamp(),
+    };
+    const fileDocRef = doc(db, "file", fileData.id);
+    await setDoc(fileDocRef, fileData);
+
+    // UPDATE USER STORAGE INFORMATION
+    await updateDoc(userDocRef, { totalSpaceUsed: increment(file.size) });
+
+    return fileData;
   } catch (error: any) {
     console.log("Error uploading file", error);
     throw error;
