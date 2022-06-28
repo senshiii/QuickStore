@@ -10,10 +10,11 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { useMutation } from "react-query";
 import { createNewFile } from "../../../api/user";
+import { UserDataContext } from "../../../context/UserDataContext";
 
 interface NewFileModalProps {
   uid: string;
@@ -25,14 +26,14 @@ const NewFileModal: FC<NewFileModalProps> = (props) => {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log("Selected File", file);
+  const { addFile } = useContext(UserDataContext)
 
   const mutation = useMutation(createNewFile, {
     onMutate: () => {
       setIsLoading(true);
     },
     onSuccess: (data) => {
-      console.log("Uploaded File Data", data);
+      addFile(data);
       setFile(null);
       setIsLoading(false);
       props.onClose();

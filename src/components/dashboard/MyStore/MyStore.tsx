@@ -1,14 +1,36 @@
-import { Box, Text } from "@chakra-ui/react";
-import React, { FC, useContext } from "react";
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
+import React, {
+  FC,
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
+
 import { useQuery } from "react-query";
 import { fetchFilesAndFolders } from "../../../api/user";
 import { UserDataContext } from "../../../context/UserDataContext";
 import { AppFile, Folder } from "../../../types";
-import FileList from "./Files";
+import FileList from "./FileList";
 import Folders from "./Folders";
 
 interface MyStoreProps {
   uid: string;
+  selectedFile: AppFile;
+  onSelectFile: (file: AppFile) => void; 
 }
 
 const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
@@ -38,7 +60,12 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
   return (
     <Box h="100%" overflowY="scroll">
       <Folders isLoading={isFetching} folders={folders} />
-      <FileList isLoading={isFetching} files={files} />
+      <FileList
+        selectedFile={props.selectedFile!}
+        onSelectFile={props.onSelectFile}
+        isLoading={isFetching}
+        files={files}
+      />
     </Box>
   );
 };

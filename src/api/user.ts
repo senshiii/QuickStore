@@ -127,8 +127,10 @@ export async function createNewFile({ file, uid }: CreateNewFileVariables) {
 
     // CREATE FILE DOCUMENT IN FIRESTORE
     const filename = file.name.substring(0, file.name.trim().lastIndexOf("."));
+    const fileType = file.name.substring(file.name.trim().lastIndexOf(".") + 1);
     const fileData: AppFile = {
       id: generateId(),
+      fileType,
       fileName: filename,
       sizeInBytes: file.size,
       src: url,

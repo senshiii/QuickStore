@@ -1,3 +1,4 @@
+import { Box, Container } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AuthProtection from "./components/auth/AuthProtection";
@@ -16,42 +17,46 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
           <UserDataContextProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <AuthProtection href="/">
-                      <Dashboard />
-                    </AuthProtection>
-                  }
-                />
-                <Route
-                  path="/folders/:folderId"
-                  element={
-                    <AuthProtection href="/signin">
-                      <h1>Folders</h1>
-                    </AuthProtection>
-                  }
-                />
-                <Route
-                  path="/signin"
-                  element={
-                    <UnAuthProtection>
-                      <SignIn />
-                    </UnAuthProtection>
-                  }
-                />
-                <Route
-                  path="/signup"
-                  element={
-                    <UnAuthProtection>
-                      <SignUp />
-                    </UnAuthProtection>
-                  }
-                />
-              </Routes>
-            </BrowserRouter>
+            <Box bg="appBackground" >
+              <Container maxW="1800px" p={0}>
+                <BrowserRouter>
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={
+                        <AuthProtection href="/">
+                          <Dashboard />
+                        </AuthProtection>
+                      }
+                    />
+                    <Route
+                      path="/folders/:folderId"
+                      element={
+                        <AuthProtection href="/signin">
+                          <h1>Folders</h1>
+                        </AuthProtection>
+                      }
+                    />
+                    <Route
+                      path="/signin"
+                      element={
+                        <UnAuthProtection>
+                          <SignIn />
+                        </UnAuthProtection>
+                      }
+                    />
+                    <Route
+                      path="/signup"
+                      element={
+                        <UnAuthProtection>
+                          <SignUp />
+                        </UnAuthProtection>
+                      }
+                    />
+                  </Routes>
+                </BrowserRouter>
+              </Container>
+            </Box>
           </UserDataContextProvider>
         </AuthContextProvider>
       </QueryClientProvider>

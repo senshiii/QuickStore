@@ -1,6 +1,14 @@
-import { Box, Flex, Grid, GridItem, Skeleton, Text } from "@chakra-ui/react";
-import React, { FC } from "react";
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Skeleton,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import { Folder } from "../../../types";
+import FolderCard from "./FolderCard";
 
 const SkeletonFolder = () => {
   return (
@@ -36,30 +44,6 @@ const LoadingSkeleton = () => {
   );
 };
 
-interface FolderProps {
-  id: string;
-  name: string;
-  createdAt: Date;
-}
-const FolderComponent: FC<FolderProps> = (props) => {
-  return (
-    <Box cursor={"pointer"} my={3}>
-      <Box bg="cardBackground" rounded="sm" roundedBottom={"none"} w="20%" h="15px" />
-      <Flex
-        bg="cardBackground"
-        justify="center"
-        align="center"
-        rounded="sm"
-        roundedTop="none"
-        w="100%"
-        h="60px"
-      >
-        <Text color="headline" fontSize="sm" >{props.name}</Text>
-      </Flex>
-    </Box>
-  );
-};
-
 interface FolderListProps {
   folders: Folder[];
   isLoading: boolean;
@@ -68,27 +52,30 @@ interface FolderListProps {
 const FolderList = (props: FolderListProps) => {
   if (props.isLoading) return <LoadingSkeleton />;
 
-  if(props.folders.length === 0) {
-    return <Flex justify="center" align="center" my={4} height="300px" >
-      <Text>No Folders Found</Text>
-    </Flex>
+  if (props.folders.length === 0) {
+    return (
+      <Flex justify="center" align="center" my={4} height="300px">
+        <Text>No Folders Found</Text>
+      </Flex>
+    );
   }
 
   return (
     <>
-    <Text color="headline" mb={4} fontWeight="bold" fontSize="xl" >Folders</Text>
-    <Grid my={4} w="100%" templateColumns="repeat(5, 1fr)" gap={6}>
-      {props.folders.map((folder) => (
-        <GridItem key={folder.id}>
-          <FolderComponent
-            name={folder.name}
-            id={folder.id}
-            createdAt={folder.createdAt}
+      <Text color="headline" mb={4}>
+        Folders
+      </Text>
+      <Grid my={4} w="100%" templateColumns="repeat(5, 1fr)" gap={6}>
+        {props.folders.map((folder) => (
+          <GridItem key={folder.id}>
+            <FolderCard
+              name={folder.name}
+              id={folder.id}
             />
-        </GridItem>
-      ))}
-    </Grid>
-      </>
+          </GridItem>
+        ))}
+      </Grid>
+    </>
   );
 };
 

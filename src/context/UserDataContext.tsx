@@ -45,7 +45,7 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
 
   const addFile = useCallback(
     (newFile: AppFile) => {
-      setFiles([...files, newFile]);
+      setFiles([newFile, ...files]);
     },
     [files]
   );

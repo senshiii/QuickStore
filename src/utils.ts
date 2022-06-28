@@ -1,3 +1,4 @@
+import { FieldValue } from "firebase/firestore";
 import { nanoid } from "nanoid";
 
 export function checkPasswordStrength(password: string): "strong" | "weak" {
@@ -25,4 +26,15 @@ export function storagePercentageCalc(usedSpace: number, totalSpace: number) {
 
 export function bytesToMegaBytes(bytes: number) {
   return parseInt((bytes / 1000000).toFixed(2));
+}
+
+export function isFileImage(fileType: string) {
+  return ["jpeg", "jpg", "png", "gif"].includes(fileType.trim().toLowerCase());
+}
+
+export function convertFirebaseTimestamptoDate(timestamp: {
+  nanoseconds: number;
+  seconds: number;
+}) {
+  return new Date(timestamp.seconds * 1000);
 }

@@ -25,7 +25,7 @@ import {
 import { ImFolderPlus, ImFolderUpload } from "react-icons/im";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaFileUpload } from "react-icons/fa";
-import { bytesToMegaBytes, storagePercentageCalc } from "../../../utils";
+import { bytesToMegaBytes, storagePercentageCalc } from "../../utils";
 
 interface MenuOptionsProps {
   icon: As<any>;

@@ -53,17 +53,18 @@ export interface Folder{
   id: string;
   uid: string;
   name: string;
-  createdAt: Date;
+  createdAt: FirebaseTimestamp;
 }
 
 export interface AppFile{
   id: string;
   src: string;
+  fileType: string;
   sizeInBytes: number;
   fileName: string; 
-  createdAt: FieldValue;
   uid?: string;
   bucketId?: string;
+  createdAt: FirebaseTimestamp
 }
 
 export interface UploadFileVariables{
@@ -76,3 +77,7 @@ export interface CreateNewFileVariables{
   uid: string;
 }
 
+export interface FirebaseTimestamp{
+  seconds: number;
+  nanoseconds: number;
+}
