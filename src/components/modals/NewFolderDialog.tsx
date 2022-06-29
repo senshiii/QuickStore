@@ -13,9 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { FC, useContext, useState } from "react";
 import { useMutation } from "react-query";
-import { createNewFolder } from "../../../api/user";
-import { UserDataContext } from "../../../context/UserDataContext";
-import { Folder } from "../../../types";
+import { createNewFolder } from "../../api/user";
+import { UserDataContext } from "../../context/UserDataContext";
+import { Folder } from "../../types";
 
 interface ModalProps {
   isOpen: boolean;

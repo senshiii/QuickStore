@@ -5,7 +5,7 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { createUserAccount, createUserAccountUsingGoogle } from "../api/auth";
 import SignUpForm from "../components/auth/SignUpForm";
-import Navbar from "../components/ui/Navbar";
+import Navbar from "../components/common/Navbar";
 import { AuthContext } from "../context/AuthContext";
 import { SignUpFormErrors } from "../types";
 

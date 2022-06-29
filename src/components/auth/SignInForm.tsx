@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import { SignInFormErrors } from "../../types";
-import AppLink from "../ui/AppLink";
+import AppLink from "../common/AppLink";
 
 interface SignInFormProps {
   email: string;

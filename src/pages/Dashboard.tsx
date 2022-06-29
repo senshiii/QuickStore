@@ -13,27 +13,22 @@ import {
 import { useCallback, useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { fetchUserProfile } from "../api/user";
-import {
-  AiOutlineCaretDown,
-  AiOutlineEdit,
-  AiOutlineStar,
-} from "react-icons/ai";
-import { BsArrowsMove, BsThreeDotsVertical, BsTrash } from "react-icons/bs";
-import { FaFile, FaFileUpload, FaLink } from "react-icons/fa";
-import { FiUserPlus } from "react-icons/fi";
+import { AiOutlineCaretDown } from "react-icons/ai";
+import { FaFileUpload } from "react-icons/fa";
 import { ImFolderPlus } from "react-icons/im";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import MyStore from "../components/dashboard/MyStore/MyStore";
 import Navbar from "../components/navigation/Navbar";
-import NewFolderDialog from "../components/dashboard/modals/NewFolderDialog";
+import NewFolderDialog from "../components/modals/NewFolderDialog";
 import Recents from "../components/dashboard/Recents";
 import RecycleBin from "../components/dashboard/RecycleBin";
 import SideNav from "../components/navigation/SideNav";
 import Starred from "../components/dashboard/Starred";
-import FullScreenLoader from "../components/ui/FullScreenLoader";
+import FullScreenLoader from "../components/common/FullScreenLoader";
 import { AuthContext } from "../context/AuthContext";
 import { AppFile, Folder, Profile } from "../types";
-import NewFileModal from "../components/dashboard/modals/NewFileModal";
+import NewFileModal from "../components/modals/NewFileModal";
+import SelectedFileOptions from "../components/options/SelectedFileOptions";
+import SelectedFolderOptions from "../components/options/SelectedFolderOptions";
 
 const Dashboard = () => {
   const { uid } = useContext(AuthContext);
@@ -70,6 +65,17 @@ const Dashboard = () => {
     [selectedFile]
   );
 
+  const folderSelectionHandler = useCallback(
+    (folder: Folder) => {
+      if (selectedFolder?.id == folder.id) {
+        setSelectedFolder(undefined);
+      } else {
+        setSelectedFolder(folder);
+      }
+    },
+    [selectedFolder]
+  );
+
   let DisplayComponent = null;
 
   switch (display) {
@@ -78,6 +84,8 @@ const Dashboard = () => {
         <MyStore
           selectedFile={selectedFile!}
           onSelectFile={fileSelectionHandler}
+          selectedFolder={selectedFolder!}
+          onSelectFolder={folderSelectionHandler}
           uid={uid}
         />
       );
@@ -152,7 +160,7 @@ const Dashboard = () => {
                   _focus={{ bg: "appBackground" }}
                   _active={{ bg: "appBackground" }}
                   color="headline"
-                  onClick={() => setShowNewFileModal(true)}
+                  onClick={() => setShowNewFolderModal(true)}
                   icon={<FaFileUpload fontSize="1.2rem" />}
                 >
                   Upload New File
@@ -161,114 +169,18 @@ const Dashboard = () => {
                   _focus={{ bg: "appBackground" }}
                   _active={{ bg: "appBackground" }}
                   color="headline"
-                  onClick={() => setShowNewFolderModal(true)}
+                  onClick={() => setShowNewFileModal(true)}
                   icon={<ImFolderPlus fontSize="1.2rem" />}
                 >
                   Create New Folder
                 </MenuItem>
               </MenuList>
             </Menu>
+
             {/* File Selection Options */}
             <Box ml="auto">
-              {selectedFile && (
-                <>
-                  <Tooltip label="Add User">
-                    <IconButton
-                      bg="transparent"
-                      _hover={{ bg: "transparent", color: "headline" }}
-                      _active={{ bg: "cardBackground" }}
-                      icon={<FiUserPlus />}
-                      aria-label="Add User"
-                      color="paragraph"
-                      fontSize="xl"
-                      fontWeight="bold"
-                      mx={1}
-                    />
-                  </Tooltip>
-                  <Tooltip label="Copy Link">
-                    <IconButton
-                      bg="transparent"
-                      _hover={{ bg: "transparent", color: "headline" }}
-                      _active={{ bg: "cardBackground" }}
-                      icon={<FaLink />}
-                      aria-label="Share File"
-                      color="paragraph"
-                      fontSize="xl"
-                      fontWeight="bold"
-                      mx={1}
-                    />
-                  </Tooltip>
-                  <Tooltip label="Delete File">
-                    <IconButton
-                      bg="transparent"
-                      _hover={{ bg: "transparent", color: "headline" }}
-                      _active={{ bg: "cardBackground" }}
-                      icon={<BsTrash />}
-                      aria-label="Delete File"
-                      color="paragraph"
-                      fontSize="xl"
-                      fontWeight="bold"
-                      mx={1}
-                    />
-                  </Tooltip>
-                  <Menu>
-                    <MenuButton
-                      bg="transparent"
-                      _hover={{ bg: "transparent", color: "headline" }}
-                      _active={{ bg: "cardBackground" }}
-                      as={IconButton}
-                    >
-                      <Tooltip label="More Options">
-                        <IconButton
-                          bg="transparent"
-                          _hover={{ bg: "transparent", color: "headline" }}
-                          _active={{ bg: "cardBackground" }}
-                          icon={<BsThreeDotsVertical />}
-                          aria-label="More Options"
-                          color="paragraph"
-                          fontSize="xl"
-                          fontWeight="bold"
-                          mx={1}
-                        />
-                      </Tooltip>
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        fontSize="sm"
-                        icon={<Icon as={BsArrowsMove} fontSize="lg" />}
-                      >
-                        Move To
-                      </MenuItem>
-                      <MenuItem
-                        fontSize="sm"
-                        icon={<Icon as={AiOutlineStar} fontSize="lg" />}
-                      >
-                        Add To Starred
-                      </MenuItem>
-                      <MenuItem
-                        fontSize="sm"
-                        icon={<Icon as={AiOutlineEdit} fontSize="lg" />}
-                      >
-                        Rename
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-
-                  <Tooltip label="View Details">
-                    <IconButton
-                      bg="transparent"
-                      _hover={{ bg: "transparent", color: "headline" }}
-                      _active={{ bg: "cardBackground" }}
-                      icon={<IoMdInformationCircleOutline />}
-                      aria-label="View Details"
-                      color="paragraph"
-                      fontSize="xl"
-                      fontWeight="bold"
-                      mx={1}
-                    />
-                  </Tooltip>
-                </>
-              )}
+              {selectedFile && <SelectedFileOptions />}
+              {selectedFolder && <SelectedFolderOptions />}
             </Box>
           </Flex>
           {DisplayComponent}

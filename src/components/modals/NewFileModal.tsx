@@ -13,8 +13,8 @@ import {
 import { FC, useContext, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { useMutation } from "react-query";
-import { createNewFile } from "../../../api/user";
-import { UserDataContext } from "../../../context/UserDataContext";
+import { createNewFile } from "../../api/user";
+import { UserDataContext } from "../../context/UserDataContext";
 
 interface NewFileModalProps {
   uid: string;

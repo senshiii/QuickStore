@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FC, ChangeEventHandler, MouseEventHandler } from "react";
 import { SignUpFormErrors } from "../../types";
-import AppLink from "../ui/AppLink";
+import AppLink from "../common/AppLink";
 
 interface SignUpFormProps {
   firstName: string;

@@ -10,7 +10,7 @@ import {
 import { FC, MouseEventHandler, useState } from "react";
 import { AppFile } from "../../../types";
 import NoFilesImage from "../../../assets/no-folders.png";
-import FullScreenFilePreview from "../modals/FullScreenFilePreview";
+import FullScreenFilePreview from "../../modals/FullScreenFilePreview";
 import FileCard from "./FileCard";
 
 const LoadingSkeleton = () => {

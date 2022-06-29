@@ -47,6 +47,8 @@ const LoadingSkeleton = () => {
 interface FolderListProps {
   folders: Folder[];
   isLoading: boolean;
+  selectedFolder: Folder;
+  onSelectFolder: (folder: Folder) => void;
 }
 
 const FolderList = (props: FolderListProps) => {
@@ -69,6 +71,8 @@ const FolderList = (props: FolderListProps) => {
         {props.folders.map((folder) => (
           <GridItem key={folder.id}>
             <FolderCard
+              selected={folder.id === props.selectedFolder?.id}
+              onClick={() => props.onSelectFolder(folder)}
               name={folder.name}
               id={folder.id}
             />

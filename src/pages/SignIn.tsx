@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Flex, Heading } from "@chakra-ui/react";
 import SignInForm from "../components/auth/SignInForm";
-import Navbar from "../components/ui/Navbar";
+import Navbar from "../components/common/Navbar";
 import { FcGoogle } from "react-icons/fc";
 import {
   createUserAccountUsingGoogle,
