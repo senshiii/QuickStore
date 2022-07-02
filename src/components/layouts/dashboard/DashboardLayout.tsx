@@ -8,14 +8,12 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import React, { FC, useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import { FaFileUpload } from "react-icons/fa";
 import { ImFolderPlus } from "react-icons/im";
-import SelectionContextProvider, {
-  SelectionContext,
-} from "../../../context/SelectionContext";
-import { AppFile, Folder, Profile } from "../../../types";
+import { SelectionContext } from "../../../context/SelectionContext";
+import { Profile } from "../../../types";
 import DeleteFileModal from "../../modals/DeleteFileModal";
 import NewFileModal from "../../modals/NewFileModal";
 import NewFolderDialog from "../../modals/NewFolderDialog";
@@ -58,6 +56,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
         onClose={() => setShowNewFileModal(false)}
       />
       <RenameFolderModal
+        folderId={selectedFolder?.id!}
         isOpen={showRenameModal}
         onClose={() => setShowRenameModal(false)}
       />

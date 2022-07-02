@@ -10,6 +10,7 @@ interface UserDataContextVariables {
   removeFolder: (folder: Folder) => void;
   setFiles: (files: AppFile[]) => void;
   setFolders: (folders: Folder[]) => void;
+  updateFolder: (folder: Folder) => void;
 }
 
 export const UserDataContext = createContext<UserDataContextVariables>({
@@ -20,7 +21,8 @@ export const UserDataContext = createContext<UserDataContextVariables>({
   removeFolder: (folder) => {},
   removeFile: (file) => {},
   setFiles: (files) => {},
-  setFolders: (folders) => {}
+  setFolders: (folders) => {},
+  updateFolder: (folder) => {},
 });
 
 const UserDataContextProvider: FC<{ children: ReactElement }> = ({
@@ -39,6 +41,15 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
   const removeFolder = useCallback(
     (targetFolder: Folder) => {
       setFolders(folders.filter((folder) => folder.id !== targetFolder.id));
+    },
+    [folders]
+  );
+
+  const updateFolder = useCallback(
+    (targetFolder: Folder) => {
+      setFolders(
+        folders.map((f) => (f.id == targetFolder.id ? targetFolder : f))
+      );
     },
     [folders]
   );
@@ -67,7 +78,8 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
         removeFile,
         removeFolder,
         setFiles,
-        setFolders
+        setFolders,
+        updateFolder,
       }}
     >
       {children}

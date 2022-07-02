@@ -149,7 +149,7 @@ export async function createNewFile({
 
 export async function renamedFolder({ folderId, name }: RenameFolderVariables) {
   try {
-    const updatedFolder = await update("folder", folderId, { name });
+    return await update("folder", folderId, { name });
   } catch (error: any) {
     console.log("Error fetching folder tree", error);
   }

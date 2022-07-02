@@ -6,6 +6,7 @@ interface SelectionContextData {
   selectedFolder: Folder | undefined;
   setFile: (file: AppFile) => void;
   setFolder: (folder: Folder) => void;
+  updateFolder: (folder: Folder) => void;
 }
 
 export const SelectionContext = createContext<SelectionContextData>({
@@ -13,6 +14,7 @@ export const SelectionContext = createContext<SelectionContextData>({
   selectedFolder: undefined,
   setFile: (file) => {},
   setFolder: (folder) => {},
+  updateFolder: (folder) => {}
 });
 
 const SelectionContextProvider = ({ children }: { children: any }) => {
@@ -50,9 +52,10 @@ const SelectionContextProvider = ({ children }: { children: any }) => {
     <SelectionContext.Provider
       value={{
         selectedFile,
-        setFile: fileSelectionHandler,
         selectedFolder,
+        setFile: fileSelectionHandler,
         setFolder: folderSelectionHandler,
+        updateFolder: setSelectedFolder
       }}
     >
       {children}

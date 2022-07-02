@@ -9,27 +9,61 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from "@chakra-ui/react";
-import React, { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
+import { useMutation } from "react-query";
+import { renamedFolder } from "../../api/user";
+import { SelectionContext } from "../../context/SelectionContext";
+import { UserDataContext } from "../../context/UserDataContext";
+import { Folder } from "../../types";
 
 interface EditFolderProp {
+  folderId: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
 const RenameFolderModal: FC<EditFolderProp> = (props) => {
   const [name, setName] = useState<string>();
-  
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { updateFolder } = useContext(SelectionContext)
+  const { updateFolder: updateFolderInStore } = useContext(UserDataContext)
+
+  const mutation = useMutation(renamedFolder, {
+    onMutate: () => {
+      setIsLoading(true);
+    },
+    onSettled(data) {
+      updateFolder(data as Folder);
+      updateFolderInStore(data as Folder);
+      toast({
+        title: "Folder Renamed",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-left'
+      });
+      setIsLoading(false);
+      props.onClose();
+    },
+    onError(error) {
+      console.log("Error", error);
+    },
+  });
+
   const onCloseHandler = () => {
     setName("");
     props.onClose();
-  }
+  };
 
   return (
     <Modal
       isCentered
-      closeOnEsc
-      closeOnOverlayClick
+      closeOnEsc={!isLoading}
+      closeOnOverlayClick={!isLoading}
       isOpen={props.isOpen}
       onClose={onCloseHandler}
     >
@@ -38,7 +72,9 @@ const RenameFolderModal: FC<EditFolderProp> = (props) => {
         <ModalHeader>Change Folder Name</ModalHeader>
         <ModalBody>
           <FormControl>
-            <FormLabel size="sm" htmlFor="name">Name</FormLabel>
+            <FormLabel size="sm" htmlFor="name">
+              Name
+            </FormLabel>
             <Input
               type="text"
               placeholder="Enter new folder name"
@@ -50,10 +86,24 @@ const RenameFolderModal: FC<EditFolderProp> = (props) => {
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button size="sm" variant="outline" colorScheme="red" onClick={onCloseHandler}>
+          <Button
+            size="sm"
+            variant="outline"
+            colorScheme="red"
+            disabled={isLoading}
+            onClick={onCloseHandler}
+          >
             Cancel
           </Button>
-          <Button size="sm" colorScheme="green" ml={4}>
+          <Button
+            isLoading={isLoading}
+            onClick={() =>
+              mutation.mutate({ name: name!, folderId: props.folderId })
+            }
+            size="sm"
+            colorScheme="green"
+            ml={4}
+          >
             Proceed
           </Button>
         </ModalFooter>
