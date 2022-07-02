@@ -50,7 +50,7 @@ const FileCard: FC<FileCardProps> = (props) => {
       <Flex justify="center" align="center" mt={2}>
         <Icon as={FileTypeIcon as IconType} mr={3} />
         <Tooltip label={fullFileName}>
-          <Text noOfLines={1} fontSize="sm">
+          <Text noOfLines={1} fontSize="xs">
             {fullFileName}
           </Text>
         </Tooltip>

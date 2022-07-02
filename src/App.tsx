@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AuthProtection from "./components/auth/AuthProtection";
 import UnAuthProtection from "./components/auth/UnAuthProtection";
 import AuthContextProvider from "./context/AuthContext";
+import SelectionContextProvider from "./context/SelectionContext";
 import UserDataContextProvider from "./context/UserDataContext";
 import Dashboard from "./pages/Dashboard";
 import SignIn from "./pages/SignIn";
@@ -17,7 +18,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
           <UserDataContextProvider>
-            <Box bg="appBackground" >
+            <Box bg="appBackground">
               <Container maxW="1800px" p={0}>
                 <BrowserRouter>
                   <Routes>
@@ -25,12 +26,14 @@ function App() {
                       path="/"
                       element={
                         <AuthProtection href="/">
-                          <Dashboard />
+                          <SelectionContextProvider>
+                            <Dashboard />
+                          </SelectionContextProvider>
                         </AuthProtection>
                       }
                     />
                     <Route
-                      path="/folders/:folderId"
+                      path="/folder/:folderId"
                       element={
                         <AuthProtection href="/signin">
                           <h1>Folders</h1>

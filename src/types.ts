@@ -47,6 +47,7 @@ export interface SignInUserVariables{
 export interface NewFolderVariables{
   uid: string;
   folderName: string;
+  parentFolder: string;
 }
 
 export interface Folder{
@@ -63,8 +64,8 @@ export interface AppFile{
   sizeInBytes: number;
   fileName: string; 
   uid?: string;
-  bucketId?: string;
-  createdAt: FirebaseTimestamp
+  folderId?: string;
+  createdAt: FirebaseTimestamp | FieldValue
 }
 
 export interface UploadFileVariables{
@@ -74,10 +75,16 @@ export interface UploadFileVariables{
 
 export interface CreateNewFileVariables{
   file: File;
+  folderId: string;
   uid: string;
 }
 
 export interface FirebaseTimestamp{
   seconds: number;
   nanoseconds: number;
+}
+
+export interface RenameFolderVariables{
+  folderId: string;
+  name: string;
 }

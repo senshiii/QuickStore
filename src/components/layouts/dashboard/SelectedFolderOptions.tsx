@@ -7,27 +7,37 @@ import {
   MenuList,
   Tooltip,
 } from "@chakra-ui/react";
+import { FC, MouseEventHandler } from "react";
 import { AiFillFolderOpen, AiOutlineEdit, AiOutlineStar } from "react-icons/ai";
 import { BsArrowsMove, BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { Folder } from "../../../types";
+import AppLink from "../../common/AppLink";
 
-const SelectedFolderOptions = () => {
+interface SelectedFolderOptionsProps {
+  selectedFolder: Folder;
+  onClickRenameOption: MouseEventHandler<HTMLButtonElement>
+}
+
+const SelectedFolderOptions: FC<SelectedFolderOptionsProps> = (props) => {
   return (
     <>
-      <Tooltip label="Open folder location">
-        <IconButton
-          bg="transparent"
-          _hover={{ bg: "transparent", color: "headline" }}
-          _active={{ bg: "cardBackground" }}
-          icon={<AiFillFolderOpen />}
-          aria-label="Open folder location"
-          color="paragraph"
-          fontSize="xl"
-          fontWeight="bold"
-          mx={1}
-        />
-      </Tooltip>
+      <AppLink href={`/folder/${props.selectedFolder.id}`}>
+        <Tooltip label="Open folder location">
+          <IconButton
+            bg="transparent"
+            _hover={{ bg: "transparent", color: "headline" }}
+            _active={{ bg: "cardBackground" }}
+            icon={<AiFillFolderOpen />}
+            aria-label="Open folder location"
+            color="paragraph"
+            fontSize="xl"
+            fontWeight="bold"
+            mx={1}
+          />
+        </Tooltip>
+      </AppLink>
       <Tooltip label="Share File">
         <IconButton
           bg="transparent"
@@ -90,6 +100,7 @@ const SelectedFolderOptions = () => {
           </MenuItem>
           <MenuItem
             fontSize="sm"
+            onClick={props.onClickRenameOption}
             icon={<Icon as={AiOutlineEdit} fontSize="lg" />}
           >
             Rename

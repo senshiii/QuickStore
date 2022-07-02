@@ -1,12 +1,6 @@
-import {
-  Box,
-  Flex,
-  Grid,
-  GridItem,
-  Skeleton,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Skeleton, Text } from "@chakra-ui/react";
+import { useContext } from "react";
+import { SelectionContext } from "../../../context/SelectionContext";
 import { Folder } from "../../../types";
 import FolderCard from "./FolderCard";
 
@@ -47,11 +41,11 @@ const LoadingSkeleton = () => {
 interface FolderListProps {
   folders: Folder[];
   isLoading: boolean;
-  selectedFolder: Folder;
-  onSelectFolder: (folder: Folder) => void;
 }
 
 const FolderList = (props: FolderListProps) => {
+  const { setFolder, selectedFolder } = useContext(SelectionContext);
+
   if (props.isLoading) return <LoadingSkeleton />;
 
   if (props.folders.length === 0) {
@@ -67,12 +61,12 @@ const FolderList = (props: FolderListProps) => {
       <Text color="headline" mb={4}>
         Folders
       </Text>
-      <Grid my={4} w="100%" templateColumns="repeat(5, 1fr)" gap={6}>
+      <Grid my={4} w="100%" templateColumns="repeat(5, 1fr)" mr={3} gap={6}>
         {props.folders.map((folder) => (
           <GridItem key={folder.id}>
             <FolderCard
-              selected={folder.id === props.selectedFolder?.id}
-              onClick={() => props.onSelectFolder(folder)}
+              selected={folder.id === selectedFolder?.id}
+              onClick={() => setFolder(folder)}
               name={folder.name}
               id={folder.id}
             />

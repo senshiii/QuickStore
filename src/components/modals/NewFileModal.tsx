@@ -15,6 +15,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { useMutation } from "react-query";
 import { createNewFile } from "../../api/user";
 import { UserDataContext } from "../../context/UserDataContext";
+import { AppFile } from "../../types";
 
 interface NewFileModalProps {
   uid: string;
@@ -26,21 +27,21 @@ const NewFileModal: FC<NewFileModalProps> = (props) => {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { addFile } = useContext(UserDataContext)
+  const { addFile } = useContext(UserDataContext);
 
   const mutation = useMutation(createNewFile, {
     onMutate: () => {
       setIsLoading(true);
     },
     onSuccess: (data) => {
-      addFile(data);
+      addFile(data as AppFile);
       setFile(null);
       setIsLoading(false);
       props.onClose();
     },
     onError: (error) => {
       setIsLoading(false);
-    }
+    },
   });
 
   return (
@@ -89,7 +90,9 @@ const NewFileModal: FC<NewFileModalProps> = (props) => {
           </Button>
           <Button
             isLoading={isLoading}
-            onClick={() => mutation.mutate({ uid: props.uid, file: file! })}
+            onClick={() =>
+              mutation.mutate({ uid: props.uid, file: file!, folderId: "root" })
+            }
             ml={4}
             colorScheme="green"
             variant="outline"

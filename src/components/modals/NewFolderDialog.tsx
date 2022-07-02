@@ -35,6 +35,7 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
       setIsLoading(true);
     },
     onSuccess: (data) => {
+      setFolderName("");
       addFolder(data as Folder);
       setIsLoading(false);
       props.onClose();
@@ -79,10 +80,11 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
             Cancel
           </Button>
           <Button
-            onClick={() => mutation.mutate({ uid: props.uid, folderName })}
+            onClick={() => mutation.mutate({ uid: props.uid, folderName, parentFolder: "" })}
             variant="solid"
             colorScheme="green"
             ml={4}
+            isLoading={isLoading}
           >
             Proceed
           </Button>

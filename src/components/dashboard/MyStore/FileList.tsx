@@ -7,11 +7,12 @@ import {
   Skeleton,
   Text,
 } from "@chakra-ui/react";
-import { FC, MouseEventHandler, useState } from "react";
+import { FC, MouseEventHandler, useContext, useState } from "react";
 import { AppFile } from "../../../types";
 import NoFilesImage from "../../../assets/no-folders.png";
 import FullScreenFilePreview from "../../modals/FullScreenFilePreview";
 import FileCard from "./FileCard";
+import { SelectionContext } from "../../../context/SelectionContext";
 
 const LoadingSkeleton = () => {
   return (
@@ -47,8 +48,6 @@ const LoadingSkeleton = () => {
 interface FileListProps {
   files: AppFile[];
   isLoading: boolean;
-  selectedFile: AppFile;
-  onSelectFile: (file: AppFile) => void;
 }
 
 const FileList: FC<FileListProps> = (props) => {
@@ -57,6 +56,8 @@ const FileList: FC<FileListProps> = (props) => {
   const [previewFileName, setPreviewFileName] = useState<string>();
   const [previewFileType, setPreviewFileType] = useState<string>();
   const [modalHeadline, setModalHeadline] = useState<string>();
+
+  const { setFile, selectedFile } = useContext(SelectionContext);
 
   const filePreviewOpenHandler = (
     src: string,
@@ -104,12 +105,12 @@ const FileList: FC<FileListProps> = (props) => {
         fileName={previewFileName!}
         fileType={previewFileType!}
       />
-      <Grid my={4} templateColumns={"repeat(5, 1fr)"} gap={6}>
+      <Grid my={4} templateColumns={"repeat(5, 1fr)"} gap={6} mr={3}>
         {props.files.map((file) => (
           <GridItem key={file.id} w="100%">
             <FileCard
-              selected={props.selectedFile?.id === file.id}
-              onSelectFile={() => props.onSelectFile(file)}
+              selected={selectedFile?.id === file.id}
+              onSelectFile={() => setFile(file)}
               onDoubleClick={() =>
                 filePreviewOpenHandler(file.src, file.fileName, file.fileType)
               }

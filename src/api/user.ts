@@ -17,30 +17,23 @@ import {
   CreateNewFileVariables,
   NewFolderVariables,
   Profile,
+  RenameFolderVariables,
   UploadFileVariables,
   UserBody,
 } from "../types";
 import { bytesToMegaBytes, generateId } from "../utils";
 import { getFileUrl, uploadFile } from "./storage";
-import { executeQuery } from "./util";
+import { create, executeQuery, read, update } from "./db-service";
 
 export async function createUser(body: UserBody) {
   try {
-    const docRef = doc(db, "user", body.id);
-    const userSnap = await setDoc(
-      docRef,
-      {
-        ...body,
-        profilePhoto: body.profilePhoto,
-        totalSpaceUsed: 0,
-        maxSpaceAvailable: 500000000,
-        createdAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
-
-    const getSnap = await getDoc(docRef);
-    return getSnap.data();
+    return await create("user", body.id, {
+      ...body,
+      profilePhoto: body.profilePhoto,
+      totalSpaceUsed: 0,
+      maxSpaceAvailable: 500000000,
+      createdAt: serverTimestamp(),
+    });
   } catch (err: any) {
     throw err;
   }
@@ -48,9 +41,7 @@ export async function createUser(body: UserBody) {
 
 export async function fetchUserProfile(uid: string) {
   try {
-    const userRef = doc(db, "user", uid);
-    const userData = (await getDoc(userRef)).data();
-    return userData;
+    return read("user", uid);
   } catch (error: any) {
     console.log("Error fetching user profile", error);
     throw error;
@@ -79,34 +70,40 @@ export async function fetchFilesAndFolders(uid: string) {
   }
 }
 
-export async function createNewFolder({ uid, folderName }: NewFolderVariables) {
+export async function createNewFolder({
+  uid,
+  folderName,
+  parentFolder,
+}: NewFolderVariables) {
   try {
-    console.log("Variables", { uid, folderName });
     const folderId = generateId();
     const folderData = {
       id: folderId,
       name: folderName,
       uid,
+      parentFolder,
       createdAt: serverTimestamp(),
     };
-    const docRef = doc(db, "folder", folderId);
-    await setDoc(docRef, folderData);
 
-    return (await getDoc(docRef)).data();
+    const createdFolder = await create("folder", folderId, folderData);
+
+    return createdFolder;
   } catch (error: any) {
     console.log("Error creating new folder", error.message);
   }
 }
 
-export async function createNewFile({ file, uid }: CreateNewFileVariables) {
+export async function createNewFile({
+  file,
+  uid,
+  folderId,
+}: CreateNewFileVariables) {
   try {
     const path = `/${uid}/${file.name}`;
 
     // CHECK FOR STORAGE AVAILABILITY
-    const userDocRef = doc(db, "user", uid);
-    const userDocSnap = await getDoc(userDocRef);
-    if (!userDocSnap.exists) throw new Error(`User with id = ${uid} not found`);
-    const user = userDocSnap.data() as Profile;
+
+    const user = (await read("collection", uid)) as Profile;
 
     // console.log("Total Space", bytesToMegaBytes(user.maxSpaceAvailable));
     // console.log("Space Used", bytesToMegaBytes(user.totalSpaceUsed));
@@ -133,19 +130,27 @@ export async function createNewFile({ file, uid }: CreateNewFileVariables) {
       fileType,
       fileName: filename,
       sizeInBytes: file.size,
+      folderId,
       src: url,
       uid,
       createdAt: serverTimestamp(),
     };
-    const fileDocRef = doc(db, "file", fileData.id);
-    await setDoc(fileDocRef, fileData);
+    const createdFile = await create("file", fileData.id, fileData);
 
     // UPDATE USER STORAGE INFORMATION
-    await updateDoc(userDocRef, { totalSpaceUsed: increment(file.size) });
+    await update("user", uid, { totalSpaceUsed: increment(file.size) });
 
-    return fileData;
+    return createdFile;
   } catch (error: any) {
     console.log("Error uploading file", error);
     throw error;
+  }
+}
+
+export async function renamedFolder({ folderId, name }: RenameFolderVariables) {
+  try {
+    const updatedFolder = await update("folder", folderId, { name });
+  } catch (error: any) {
+    console.log("Error fetching folder tree", error);
   }
 }

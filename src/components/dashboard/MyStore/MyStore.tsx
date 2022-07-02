@@ -29,10 +29,6 @@ import Folders from "./Folders";
 
 interface MyStoreProps {
   uid: string;
-  selectedFile: AppFile;
-  selectedFolder: Folder;
-  onSelectFile: (file: AppFile) => void;
-  onSelectFolder: (folder: Folder) => void;
 }
 
 const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
@@ -62,14 +58,10 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
   return (
     <Box h="100%" overflowY="scroll">
       <Folders
-        selectedFolder={props.selectedFolder!}
-        onSelectFolder={props.onSelectFolder}
         isLoading={isFetching}
         folders={folders}
       />
       <FileList
-        selectedFile={props.selectedFile!}
-        onSelectFile={props.onSelectFile}
         isLoading={isFetching}
         files={files}
       />
