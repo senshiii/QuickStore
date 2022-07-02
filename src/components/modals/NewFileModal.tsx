@@ -21,6 +21,7 @@ interface NewFileModalProps {
   uid: string;
   isOpen: boolean;
   onClose: () => void;
+  parentFolderId: string
 }
 
 const NewFileModal: FC<NewFileModalProps> = (props) => {
@@ -91,7 +92,7 @@ const NewFileModal: FC<NewFileModalProps> = (props) => {
           <Button
             isLoading={isLoading}
             onClick={() =>
-              mutation.mutate({ uid: props.uid, file: file!, folderId: "root" })
+              mutation.mutate({ uid: props.uid, file: file!, folderId: props.parentFolderId })
             }
             ml={4}
             colorScheme="green"

@@ -53,8 +53,10 @@ export interface NewFolderVariables{
 export interface Folder{
   id: string;
   uid: string;
+  parentFolder: string;
   name: string;
-  createdAt: FirebaseTimestamp;
+  createdAt: FirebaseTimestamp | FieldValue;
+  starred: boolean
 }
 
 export interface AppFile{
@@ -65,6 +67,7 @@ export interface AppFile{
   fileName: string; 
   uid?: string;
   folderId?: string;
+  starred?: boolean;
   createdAt: FirebaseTimestamp | FieldValue
 }
 

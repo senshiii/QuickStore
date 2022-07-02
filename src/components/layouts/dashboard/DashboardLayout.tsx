@@ -27,6 +27,7 @@ interface DashboardLayoutProps {
   profile: Profile;
   uid: string;
   children: any;
+  rootFolderId: string | undefined;
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
@@ -46,11 +47,13 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
     <>
       {/* MODALS */}
       <NewFolderDialog
+        parentFolderId={props.rootFolderId ?? "root"}
         uid={props.uid}
         isOpen={showNewFolderModal}
         onClose={() => setShowNewFolderModal(false)}
       />
       <NewFileModal
+        parentFolderId={props.rootFolderId ?? "root"}
         uid={props.uid}
         isOpen={showNewFileModal}
         onClose={() => setShowNewFileModal(false)}
@@ -138,7 +141,13 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
               )}
             </Box>
           </Flex>
-          {props.children}
+          <Box
+            h="100%"
+            overflowY="scroll"
+            className="dashboard-layout-children-container"
+          >
+            {props.children}
+          </Box>
         </Box>
       </Flex>
     </>

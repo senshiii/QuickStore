@@ -1,24 +1,20 @@
 import {
-  doc,
-  getDoc,
-  setDoc,
   serverTimestamp,
   collection,
   query,
   where,
   orderBy,
   limit,
-  updateDoc,
   increment,
 } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import {
   AppFile,
   CreateNewFileVariables,
+  Folder,
   NewFolderVariables,
   Profile,
   RenameFolderVariables,
-  UploadFileVariables,
   UserBody,
 } from "../types";
 import { bytesToMegaBytes, generateId } from "../utils";
@@ -77,11 +73,12 @@ export async function createNewFolder({
 }: NewFolderVariables) {
   try {
     const folderId = generateId();
-    const folderData = {
+    const folderData: Folder = {
       id: folderId,
       name: folderName,
       uid,
       parentFolder,
+      starred: false,
       createdAt: serverTimestamp(),
     };
 
@@ -133,6 +130,7 @@ export async function createNewFile({
       folderId,
       src: url,
       uid,
+      starred: false,
       createdAt: serverTimestamp(),
     };
     const createdFile = await create("file", fileData.id, fileData);

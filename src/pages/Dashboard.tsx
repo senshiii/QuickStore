@@ -9,9 +9,13 @@ import FullScreenLoader from "../components/common/FullScreenLoader";
 import { AuthContext } from "../context/AuthContext";
 import { Profile } from "../types";
 import DashboardLayout from "../components/layouts/dashboard/DashboardLayout";
+import { Box } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 
 const Dashboard = () => {
   const { uid } = useContext(AuthContext);
+
+  const { folderId: rootFolderId } = useParams();
 
   const { data, error, isFetching, isError } = useQuery(
     ["user", uid],
@@ -52,7 +56,7 @@ const Dashboard = () => {
   }
 
   return (
-    <DashboardLayout profile={profile} uid={uid}>
+    <DashboardLayout rootFolderId={rootFolderId} profile={profile} uid={uid}>
       {DisplayComponent}
     </DashboardLayout>
   );

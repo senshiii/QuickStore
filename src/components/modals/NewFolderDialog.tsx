@@ -21,14 +21,15 @@ interface ModalProps {
   isOpen: boolean;
   uid: string;
   onClose: () => void;
+  parentFolderId: string;
 }
 
 const NewFolderDialog: FC<ModalProps> = (props) => {
   const [initialFocusRef, setInitialFocusRef] = useState<any>();
-  const [folderName, setFolderName] = useState<string>("")
+  const [folderName, setFolderName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { addFolder } = useContext(UserDataContext)
+  const { addFolder } = useContext(UserDataContext);
 
   const mutation = useMutation(createNewFolder, {
     onMutate: () => {
@@ -39,7 +40,7 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
       addFolder(data as Folder);
       setIsLoading(false);
       props.onClose();
-    }
+    },
   });
 
   return (
@@ -65,7 +66,7 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
               id="name"
               placeholder="Type folder name"
               value={folderName}
-              onChange={e => setFolderName(e.target.value)}
+              onChange={(e) => setFolderName(e.target.value)}
               ref={initialFocusRef}
             />
           </FormControl>
@@ -80,7 +81,13 @@ const NewFolderDialog: FC<ModalProps> = (props) => {
             Cancel
           </Button>
           <Button
-            onClick={() => mutation.mutate({ uid: props.uid, folderName, parentFolder: "" })}
+            onClick={() =>
+              mutation.mutate({
+                uid: props.uid,
+                folderName,
+                parentFolder: props.parentFolderId,
+              })
+            }
             variant="solid"
             colorScheme="green"
             ml={4}

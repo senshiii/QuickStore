@@ -13,3 +13,17 @@ html, body{
   overflow-x: hidden !important;
 }
 
+.dashboard-layout-children-container::-webkit-scrollbar{
+  width: 4px;
+}
+
+.dashboard-layout-children-container::-webkit-scrollbar-track{
+  background: #ccc;
+  border-radius: 16px;
+}
+
+.dashboard-layout-children-container::-webkit-scrollbar-thumb{
+  background-color: #1d1d1d;
+}
+
+

@@ -56,7 +56,7 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
   if (isError) return <h1>Error</h1>;
 
   return (
-    <Box h="100%" overflowY="scroll">
+    <Box>
       <Folders
         isLoading={isFetching}
         folders={folders}
