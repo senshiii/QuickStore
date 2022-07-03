@@ -7,13 +7,17 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useToast,
 } from "@chakra-ui/react";
 import { FC, useContext, useState } from "react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import { FaFileUpload } from "react-icons/fa";
 import { ImFolderPlus } from "react-icons/im";
+import { useMutation } from "react-query";
+import { toggleFileStarred, toggleFolderStarred } from "../../../api/user";
 import { SelectionContext } from "../../../context/SelectionContext";
-import { Profile } from "../../../types";
+import { UserDataContext } from "../../../context/UserDataContext";
+import { AppFile, Folder, Profile } from "../../../types";
 import DeleteFileModal from "../../modals/DeleteFileModal";
 import NewFileModal from "../../modals/NewFileModal";
 import NewFolderDialog from "../../modals/NewFolderDialog";
@@ -31,7 +35,16 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
-  const { selectedFile, selectedFolder } = useContext(SelectionContext);
+  const {
+    selectedFile,
+    selectedFolder,
+    updateFolder: updateSelectedFolder,
+    updateFile: updateSelectedFile,
+  } = useContext(SelectionContext);
+
+  const { updateFolder, updateFile } = useContext(UserDataContext);
+
+  const toast = useToast();
 
   const [showNewFolderModal, setShowNewFolderModal] = useState<boolean>(false);
   const [showNewFileModal, setShowNewFileModal] = useState<boolean>(false);
@@ -39,6 +52,58 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
   const [showDeleteFileModal, setShowDeleteFileModal] = useState<boolean>(
     false
   );
+
+  const starFolderMutation = useMutation(toggleFolderStarred, {
+    onMutate: () => {
+      toast({
+        title: "Loading...",
+        position: "bottom-left",
+        status: "loading",
+        isClosable: false,
+      });
+    },
+    onSuccess(data) {
+      toast.closeAll();
+      toast({
+        title: "Done",
+        status: "success",
+        position: "bottom-left",
+        duration: 5000,
+        isClosable: true,
+      });
+      updateSelectedFolder(data as Folder);
+      updateFolder(data as Folder);
+    },
+    onError() {
+      toast.closeAll();
+    },
+  });
+
+  const starFileMutation = useMutation(toggleFileStarred, {
+    onMutate: () => {
+      toast({
+        title: "Loading...",
+        position: "bottom-left",
+        status: "loading",
+        isClosable: false,
+      });
+    },
+    onSuccess(data) {
+      toast.closeAll();
+      toast({
+        title: "Done",
+        status: "success",
+        position: "bottom-left",
+        duration: 5000,
+        isClosable: true,
+      });
+      updateSelectedFile(data as AppFile);
+      updateFile(data as AppFile);
+    },
+    onError() {
+      toast.closeAll();
+    },
+  });
 
   const clickNewFileHandler = () => setShowNewFileModal(true);
   const clickNewFolderHandler = () => setShowNewFolderModal(true);
@@ -132,9 +197,17 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
 
             {/* File Selection Options */}
             <Box ml="auto">
-              {selectedFile && <SelectedFileOptions />}
+              {selectedFile && (
+                <SelectedFileOptions
+                  selectedFile={selectedFile}
+                  onToggleStar={() => starFileMutation.mutate(selectedFile.id!)}
+                />
+              )}
               {selectedFolder && (
                 <SelectedFolderOptions
+                  onClickStar={() =>
+                    starFolderMutation.mutate(selectedFolder?.id!)
+                  }
                   onClickRenameOption={() => setShowRenameModal(true)}
                   selectedFolder={selectedFolder}
                 />

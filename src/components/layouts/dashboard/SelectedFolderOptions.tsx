@@ -8,7 +8,12 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { FC, MouseEventHandler } from "react";
-import { AiFillFolderOpen, AiOutlineEdit, AiOutlineStar } from "react-icons/ai";
+import {
+  AiFillFolderOpen,
+  AiFillStar,
+  AiOutlineEdit,
+  AiOutlineStar,
+} from "react-icons/ai";
 import { BsArrowsMove, BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -17,13 +22,14 @@ import AppLink from "../../common/AppLink";
 
 interface SelectedFolderOptionsProps {
   selectedFolder: Folder;
-  onClickRenameOption: MouseEventHandler<HTMLButtonElement>
+  onClickStar: MouseEventHandler<HTMLButtonElement>;
+  onClickRenameOption: MouseEventHandler<HTMLButtonElement>;
 }
 
 const SelectedFolderOptions: FC<SelectedFolderOptionsProps> = (props) => {
   return (
     <>
-      <AppLink href={`/folder/${props.selectedFolder.id}`}>
+      <AppLink href={`/folder/${props.selectedFolder.id!}`}>
         <Tooltip label="Open folder location">
           <IconButton
             bg="transparent"
@@ -94,9 +100,18 @@ const SelectedFolderOptions: FC<SelectedFolderOptionsProps> = (props) => {
           </MenuItem>
           <MenuItem
             fontSize="sm"
-            icon={<Icon as={AiOutlineStar} fontSize="lg" />}
+            onClick={props.onClickStar}
+            icon={
+              props?.selectedFolder?.starred ? (
+                <Icon color="yellow.400" fontSize="lg" as={AiFillStar} />
+              ) : (
+                <Icon as={AiOutlineStar} fontSize="lg" />
+              )
+            }
           >
-            Add To Starred
+            {props.selectedFolder?.starred
+              ? "Remove From Starred"
+              : "Add To Starred "}
           </MenuItem>
           <MenuItem
             fontSize="sm"

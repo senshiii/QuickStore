@@ -11,6 +11,7 @@ interface UserDataContextVariables {
   setFiles: (files: AppFile[]) => void;
   setFolders: (folders: Folder[]) => void;
   updateFolder: (folder: Folder) => void;
+  updateFile: (file: AppFile) => void;
 }
 
 export const UserDataContext = createContext<UserDataContextVariables>({
@@ -23,6 +24,7 @@ export const UserDataContext = createContext<UserDataContextVariables>({
   setFiles: (files) => {},
   setFolders: (folders) => {},
   updateFolder: (folder) => {},
+  updateFile: (file) => {},
 });
 
 const UserDataContextProvider: FC<{ children: ReactElement }> = ({
@@ -53,6 +55,15 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
     },
     [folders]
   );
+  
+  const updateFile = useCallback(
+    (targetFile: AppFile) => {
+      setFiles(
+        files.map((f) => (f.id == targetFile.id ? targetFile : f))
+      );
+    },
+    [files]
+  );
 
   const addFile = useCallback(
     (newFile: AppFile) => {
@@ -80,6 +91,7 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
         setFiles,
         setFolders,
         updateFolder,
+        updateFile
       }}
     >
       {children}

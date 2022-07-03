@@ -7,12 +7,19 @@ import {
   MenuList,
   Tooltip,
 } from "@chakra-ui/react";
-import { AiOutlineEdit, AiOutlineStar } from "react-icons/ai";
+import { FC, MouseEventHandler } from "react";
+import { AiFillStar, AiOutlineEdit, AiOutlineStar } from "react-icons/ai";
 import { BsArrowsMove, BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { AppFile } from "../../../types";
 
-const SelectedFileOptions = () => {
+interface Props {
+  selectedFile: AppFile;
+  onToggleStar: MouseEventHandler<HTMLButtonElement>;
+}
+
+const SelectedFileOptions: FC<Props> = (props) => {
   return (
     <>
       <Tooltip label="Share File">
@@ -71,15 +78,18 @@ const SelectedFileOptions = () => {
           </MenuItem>
           <MenuItem
             fontSize="sm"
-            icon={<Icon as={AiOutlineStar} fontSize="lg" />}
+            icon={
+              props.selectedFile.starred ? (
+                <Icon as={AiFillStar} color="yellow.400" fontSize="lg" />
+              ) : (
+                <Icon as={AiOutlineStar} fontSize="lg" />
+              )
+            }
+            onClick={props.onToggleStar}
           >
-            Add To Starred
-          </MenuItem>
-          <MenuItem
-            fontSize="sm"
-            icon={<Icon as={AiOutlineEdit} fontSize="lg" />}
-          >
-            Rename
+            {props.selectedFile.starred
+              ? "Remove From Starred"
+              : "Add To Starred"}
           </MenuItem>
         </MenuList>
       </Menu>

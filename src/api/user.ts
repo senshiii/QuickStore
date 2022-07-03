@@ -152,3 +152,26 @@ export async function renamedFolder({ folderId, name }: RenameFolderVariables) {
     console.log("Error fetching folder tree", error);
   }
 }
+
+export async function toggleFolderStarred(folderId: string) {
+  try {
+    const folder = await read("folder", folderId);
+    const starredFolder = update("folder", folderId, { starred: !folder?.starred });
+    return starredFolder;
+  } catch (error) {
+    console.log("Error starring folder", error);
+    throw error;
+  }
+}
+
+export async function toggleFileStarred(fileId: string) {
+  try {
+    const file = await read("file", fileId);
+    const starredFile = update("file", fileId, { starred: !file?.starred });
+    return starredFile;
+  } catch (error) {
+    console.log("Error starring file", error);
+    throw error;
+  }
+}
+
