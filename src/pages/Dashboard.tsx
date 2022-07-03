@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { fetchUserProfile } from "../api/user";
-import MyStore from "../components/dashboard/MyStore/MyStore";
+import MyStore from "../components/dashboard/MyStore";
 import Recents from "../components/dashboard/Recents";
 import RecycleBin from "../components/dashboard/RecycleBin";
 import Starred from "../components/dashboard/Starred";

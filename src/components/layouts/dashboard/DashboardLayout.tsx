@@ -19,6 +19,7 @@ import { SelectionContext } from "../../../context/SelectionContext";
 import { UserDataContext } from "../../../context/UserDataContext";
 import { AppFile, Folder, Profile } from "../../../types";
 import DeleteFileModal from "../../modals/DeleteFileModal";
+import DeleteFolderModal from "../../modals/DeleteFolderModal";
 import NewFileModal from "../../modals/NewFileModal";
 import NewFolderDialog from "../../modals/NewFolderDialog";
 import RenameFolderModal from "../../modals/RenameFolderModal";
@@ -50,6 +51,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
   const [showNewFileModal, setShowNewFileModal] = useState<boolean>(false);
   const [showRenameModal, setShowRenameModal] = useState<boolean>(false);
   const [showDeleteFileModal, setShowDeleteFileModal] = useState<boolean>(
+    false
+  );
+  const [showDeleteFolderModal, setShowDeleteFolderModal] = useState<boolean>(
     false
   );
 
@@ -132,6 +136,12 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
         isOpen={showDeleteFileModal}
         onClose={() => setShowDeleteFileModal(true)}
       />
+      <DeleteFolderModal
+        isOpen={showDeleteFolderModal}
+        onClose={() => setShowDeleteFolderModal(false)}
+        folderId={selectedFolder?.id!}
+        folderName={selectedFolder?.name!}
+      />
 
       {/* PAGE UI */}
       <Navbar
@@ -208,6 +218,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
                   onClickStar={() =>
                     starFolderMutation.mutate(selectedFolder?.id!)
                   }
+                  onDelete={() => setShowDeleteFolderModal(true)}
                   onClickRenameOption={() => setShowRenameModal(true)}
                   selectedFolder={selectedFolder}
                 />

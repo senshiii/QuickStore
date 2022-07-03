@@ -55,12 +55,10 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
     },
     [folders]
   );
-  
+
   const updateFile = useCallback(
     (targetFile: AppFile) => {
-      setFiles(
-        files.map((f) => (f.id == targetFile.id ? targetFile : f))
-      );
+      setFiles(files.map((f) => (f.id == targetFile.id ? targetFile : f)));
     },
     [files]
   );
@@ -84,14 +82,14 @@ const UserDataContextProvider: FC<{ children: ReactElement }> = ({
       value={{
         files,
         folders,
-        addFile,
-        addFolder,
-        removeFile,
-        removeFolder,
         setFiles,
+        addFile,
+        updateFile,
+        removeFile,
         setFolders,
+        addFolder,
         updateFolder,
-        updateFile
+        removeFolder,
       }}
     >
       {children}

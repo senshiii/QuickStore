@@ -1,31 +1,12 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuGroup,
-  MenuItem,
-  MenuList,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
-import React, {
-  FC,
-  MouseEventHandler,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import { Box } from "@chakra-ui/react";
+import React, { FC, useContext } from "react";
 
 import { useQuery } from "react-query";
-import { fetchFilesAndFolders } from "../../../api/user";
-import { UserDataContext } from "../../../context/UserDataContext";
-import { AppFile, Folder } from "../../../types";
-import FileList from "./FileList";
-import Folders from "./Folders";
+import { fetchFilesAndFolders } from "../../api/user";
+import { UserDataContext } from "../../context/UserDataContext";
+import { AppFile, Folder } from "../../types";
+import FileList from "../lists/file/FileList";
+import FolderList from "../lists/folder/FolderList";
 
 interface MyStoreProps {
   uid: string;
@@ -57,14 +38,8 @@ const MyStore: FC<MyStoreProps> = ({ uid, ...props }) => {
 
   return (
     <Box>
-      <Folders
-        isLoading={isFetching}
-        folders={folders}
-      />
-      <FileList
-        isLoading={isFetching}
-        files={files}
-      />
+      <FolderList isLoading={isFetching} folders={folders} />
+      <FileList isLoading={isFetching} files={files} />
     </Box>
   );
 };

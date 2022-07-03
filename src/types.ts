@@ -66,7 +66,7 @@ export interface AppFile{
   sizeInBytes: number;
   fileName: string; 
   uid?: string;
-  folderId?: string;
+  parentFolder?: string;
   starred?: boolean;
   createdAt: FirebaseTimestamp | FieldValue
 }

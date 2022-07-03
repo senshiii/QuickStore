@@ -19,7 +19,7 @@ import {
 } from "../types";
 import { bytesToMegaBytes, generateId } from "../utils";
 import { getFileUrl, uploadFile } from "./storage";
-import { create, executeQuery, read, update } from "./db-service";
+import { create, dbDelete, executeQuery, read, update } from "./db-service";
 
 export async function createUser(body: UserBody) {
   try {
@@ -75,7 +75,7 @@ export async function createNewFolder({
     const folderId = generateId();
     const folderData: Folder = {
       id: folderId,
-      name: folderName,
+      name: folderName.trim(),
       uid,
       parentFolder,
       starred: false,
@@ -125,9 +125,9 @@ export async function createNewFile({
     const fileData: AppFile = {
       id: generateId(),
       fileType,
-      fileName: filename,
+      fileName: filename.trim(),
       sizeInBytes: file.size,
-      folderId,
+      parentFolder: folderId,
       src: url,
       uid,
       starred: false,
@@ -147,7 +147,7 @@ export async function createNewFile({
 
 export async function renamedFolder({ folderId, name }: RenameFolderVariables) {
   try {
-    return await update("folder", folderId, { name });
+    return await update("folder", folderId, { name: name.trim() });
   } catch (error: any) {
     console.log("Error fetching folder tree", error);
   }
@@ -156,7 +156,9 @@ export async function renamedFolder({ folderId, name }: RenameFolderVariables) {
 export async function toggleFolderStarred(folderId: string) {
   try {
     const folder = await read("folder", folderId);
-    const starredFolder = update("folder", folderId, { starred: !folder?.starred });
+    const starredFolder = update("folder", folderId, {
+      starred: !folder?.starred,
+    });
     return starredFolder;
   } catch (error) {
     console.log("Error starring folder", error);
@@ -175,3 +177,28 @@ export async function toggleFileStarred(fileId: string) {
   }
 }
 
+export async function moveFolderToBin(folderId: string) {
+  try {
+    const folderCollectionRef = collection(db, "folder");
+    const fileCollectionRef = collection(db, "file");
+    const nestedFiles = await executeQuery(
+      query(fileCollectionRef, where("parentFolder", "==", folderId))
+    );
+
+    const nestedFolders = await executeQuery(
+      query(folderCollectionRef, where("parentFolder", "==", folderId))
+    );
+
+    console.log("Nested Files", nestedFiles);
+    console.log("Nested Folders", nestedFolders);
+
+    if (nestedFiles.length != 0 || nestedFolders.length != 0)
+      throw new Error("Cannot move folder to bin. Folder is not empty");
+
+    return await update("folder", folderId, { recycled: true });
+    
+  } catch (error) {
+    console.log("Error moving folder to bin", error);
+    throw error;
+  }
+}

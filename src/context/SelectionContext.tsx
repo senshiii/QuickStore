@@ -6,7 +6,7 @@ interface SelectionContextData {
   selectedFolder: Folder | undefined;
   setFile: (file: AppFile) => void;
   setFolder: (folder: Folder) => void;
-  updateFolder: (folder: Folder) => void;
+  updateFolder: (folder: Folder | null) => void;
   updateFile: (file: AppFile) => void;
 }
 
@@ -20,8 +20,8 @@ export const SelectionContext = createContext<SelectionContextData>({
 });
 
 const SelectionContextProvider = ({ children }: { children: any }) => {
-  const [selectedFile, setSelectedFile] = useState<AppFile>();
-  const [selectedFolder, setSelectedFolder] = useState<Folder>();
+  const [selectedFile, setSelectedFile] = useState<AppFile | null>();
+  const [selectedFolder, setSelectedFolder] = useState<Folder | null>();
 
   const fileSelectionHandler = useCallback(
     (file: AppFile) => {
@@ -53,8 +53,8 @@ const SelectionContextProvider = ({ children }: { children: any }) => {
   return (
     <SelectionContext.Provider
       value={{
-        selectedFile,
-        selectedFolder,
+        selectedFile: selectedFile!,
+        selectedFolder: selectedFolder!,
         setFile: fileSelectionHandler,
         setFolder: folderSelectionHandler,
         updateFolder: setSelectedFolder,

@@ -5,6 +5,7 @@ import {
   doc,
   updateDoc,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 
@@ -50,4 +51,10 @@ export async function update(
   } catch (err) {
     throw new Error("Error updating document");
   }
+}
+
+export async function dbDelete(collection: string, path: string){
+  const ref = doc(db, collection, path);
+  await deleteDoc(ref);
+  return true;
 }

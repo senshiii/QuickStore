@@ -23,6 +23,7 @@ import AppLink from "../../common/AppLink";
 interface SelectedFolderOptionsProps {
   selectedFolder: Folder;
   onClickStar: MouseEventHandler<HTMLButtonElement>;
+  onDelete: MouseEventHandler<HTMLButtonElement>;
   onClickRenameOption: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -65,6 +66,7 @@ const SelectedFolderOptions: FC<SelectedFolderOptionsProps> = (props) => {
           icon={<BsTrash />}
           aria-label="Move To Bin"
           color="paragraph"
+          onClick={props.onDelete}
           fontSize="xl"
           fontWeight="bold"
           mx={1}
