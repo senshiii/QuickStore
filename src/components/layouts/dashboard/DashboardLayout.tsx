@@ -134,7 +134,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
       />
       <DeleteFileModal
         isOpen={showDeleteFileModal}
-        onClose={() => setShowDeleteFileModal(true)}
+        onClose={() => setShowDeleteFileModal(false)}
+        fileName={selectedFile?.fileName!}
+        fileId={selectedFile?.id!}
       />
       <DeleteFolderModal
         isOpen={showDeleteFolderModal}
@@ -211,6 +213,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
                 <SelectedFileOptions
                   selectedFile={selectedFile}
                   onToggleStar={() => starFileMutation.mutate(selectedFile.id!)}
+                  onDelete={() => setShowDeleteFileModal(true)}
                 />
               )}
               {selectedFolder && (

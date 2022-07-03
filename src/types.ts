@@ -55,6 +55,7 @@ export interface Folder{
   uid: string;
   parentFolder: string;
   name: string;
+  recycled: boolean;
   createdAt: FirebaseTimestamp | FieldValue;
   starred: boolean
 }
@@ -65,6 +66,7 @@ export interface AppFile{
   fileType: string;
   sizeInBytes: number;
   fileName: string; 
+  recycled: boolean;
   uid?: string;
   parentFolder?: string;
   starred?: boolean;

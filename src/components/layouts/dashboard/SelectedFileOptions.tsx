@@ -17,6 +17,7 @@ import { AppFile } from "../../../types";
 interface Props {
   selectedFile: AppFile;
   onToggleStar: MouseEventHandler<HTMLButtonElement>;
+  onDelete: MouseEventHandler<HTMLButtonElement>;
 }
 
 const SelectedFileOptions: FC<Props> = (props) => {
@@ -46,6 +47,7 @@ const SelectedFileOptions: FC<Props> = (props) => {
           fontSize="xl"
           fontWeight="bold"
           mx={1}
+          onClick={props.onDelete}
         />
       </Tooltip>
       <Menu>

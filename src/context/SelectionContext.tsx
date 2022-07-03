@@ -2,17 +2,17 @@ import { createContext, useCallback, useState } from "react";
 import { AppFile, Folder } from "../types";
 
 interface SelectionContextData {
-  selectedFile: AppFile | undefined;
-  selectedFolder: Folder | undefined;
+  selectedFile: AppFile | null;
+  selectedFolder: Folder | null;
   setFile: (file: AppFile) => void;
   setFolder: (folder: Folder) => void;
   updateFolder: (folder: Folder | null) => void;
-  updateFile: (file: AppFile) => void;
+  updateFile: (file: AppFile |null) => void;
 }
 
 export const SelectionContext = createContext<SelectionContextData>({
-  selectedFile: undefined,
-  selectedFolder: undefined,
+  selectedFile: null,
+  selectedFolder: null,
   setFile: (file) => {},
   setFolder: (folder) => {},
   updateFolder: (folder) => {},
@@ -20,14 +20,14 @@ export const SelectionContext = createContext<SelectionContextData>({
 });
 
 const SelectionContextProvider = ({ children }: { children: any }) => {
-  const [selectedFile, setSelectedFile] = useState<AppFile | null>();
-  const [selectedFolder, setSelectedFolder] = useState<Folder | null>();
+  const [selectedFile, setSelectedFile] = useState<AppFile | null>(null);
+  const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
 
   const fileSelectionHandler = useCallback(
     (file: AppFile) => {
-      setSelectedFolder(undefined);
+      setSelectedFolder(null);
       if (selectedFile?.id == file.id) {
-        setSelectedFile(undefined);
+        setSelectedFile(null);
       } else {
         setSelectedFile(file);
       }
@@ -37,9 +37,9 @@ const SelectionContextProvider = ({ children }: { children: any }) => {
 
   const folderSelectionHandler = useCallback(
     (folder: Folder) => {
-      setSelectedFile(undefined);
+      setSelectedFile(null);
       if (selectedFolder?.id == folder.id) {
-        setSelectedFolder(undefined);
+        setSelectedFolder(null);
       } else {
         setSelectedFolder(folder);
       }
@@ -53,8 +53,8 @@ const SelectionContextProvider = ({ children }: { children: any }) => {
   return (
     <SelectionContext.Provider
       value={{
-        selectedFile: selectedFile!,
-        selectedFolder: selectedFolder!,
+        selectedFile: selectedFile,
+        selectedFolder: selectedFolder,
         setFile: fileSelectionHandler,
         setFolder: folderSelectionHandler,
         updateFolder: setSelectedFolder,

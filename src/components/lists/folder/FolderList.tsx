@@ -1,5 +1,6 @@
-import { Box, Flex, Grid, GridItem, Skeleton, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Icon, Skeleton, Text } from "@chakra-ui/react";
 import { useContext } from "react";
+import { AiFillFolder } from "react-icons/ai";
 import { SelectionContext } from "../../../context/SelectionContext";
 import { Folder } from "../../../types";
 import FolderCard from "./FolderCard";
@@ -50,8 +51,9 @@ const FolderList = (props: FolderListProps) => {
 
   if (props.folders.length === 0) {
     return (
-      <Flex justify="center" align="center" my={4} height="300px">
-        <Text>No Folders Found</Text>
+      <Flex justify="center" align="center" my={4} height="40px">
+        <Icon as={AiFillFolder} color="white" fontSize="xl" mr={3} />
+        <Text color="white" >No Folders Found</Text>
       </Flex>
     );
   }

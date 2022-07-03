@@ -49,6 +49,7 @@ export async function update(
     const updatedDoc = read(collection, path);
     return updatedDoc;
   } catch (err) {
+    console.log("Error updating document", err);
     throw new Error("Error updating document");
   }
 }

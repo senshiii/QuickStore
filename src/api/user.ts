@@ -47,18 +47,20 @@ export async function fetchUserProfile(uid: string) {
 export async function fetchFilesAndFolders(uid: string) {
   try {
     const folderRef = collection(db, "folder");
-    const q = query(folderRef, where("uid", "==", uid));
+    const q = query(folderRef, where("uid", "==", uid), where("recycled", "==", false));
     const folders = await executeQuery(q);
 
     const fileRef = collection(db, "file");
     const fileQuery = query(
       fileRef,
       where("uid", "==", uid),
+      where("recycled", "==", false),
       orderBy("createdAt", "desc"),
       limit(30)
     );
 
     const files = await executeQuery(fileQuery);
+    // console.log(files);
     return { folders, files };
   } catch (error: any) {
     console.log("Error fetching files and folders", error.message);
@@ -77,6 +79,7 @@ export async function createNewFolder({
       id: folderId,
       name: folderName.trim(),
       uid,
+      recycled: false,
       parentFolder,
       starred: false,
       createdAt: serverTimestamp(),
@@ -125,6 +128,7 @@ export async function createNewFile({
     const fileData: AppFile = {
       id: generateId(),
       fileType,
+      recycled: false,
       fileName: filename.trim(),
       sizeInBytes: file.size,
       parentFolder: folderId,
@@ -189,9 +193,6 @@ export async function moveFolderToBin(folderId: string) {
       query(folderCollectionRef, where("parentFolder", "==", folderId))
     );
 
-    console.log("Nested Files", nestedFiles);
-    console.log("Nested Folders", nestedFolders);
-
     if (nestedFiles.length != 0 || nestedFolders.length != 0)
       throw new Error("Cannot move folder to bin. Folder is not empty");
 
@@ -200,5 +201,13 @@ export async function moveFolderToBin(folderId: string) {
   } catch (error) {
     console.log("Error moving folder to bin", error);
     throw error;
+  }
+}
+
+export async function moveFileToBin(fileId: string){
+  try{
+    return await update("file", fileId, { recycled: true });
+  }catch(error){
+    console.log("Error moving file to bin", error);
   }
 }
